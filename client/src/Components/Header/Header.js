@@ -6,16 +6,16 @@ const Header = ({ darkMode, toggleDarkMode }) => {
   return (
     <header className="flex justify-between items-center h-20 shadow-md">
       <div className="relative flex justify-start items-end h-full left-[12px]">
-        <button className="h-10 w-24 mx-1 text-sm text-[#373A40] bg-[#EEEEEE]  focus:outline-none">
+        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE]  focus:outline-none">
           Home
         </button>
-        <button className="h-10 w-24 mx-1 text-sm text-[#373A40] bg-[#EEEEEE] focus:outline-none">
+        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE] focus:outline-none">
           Devices
         </button>
-        <button className="h-10 w-24 mx-1 text-sm text-[#373A40] bg-[#EEEEEE] focus:outline-none">
+        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE] focus:outline-none">
           About Us
         </button>
-        <button className="h-10 w-24 mx-1 text-sm text-[#373A40] bg-[#EEEEEE] focus:outline-none">
+        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE] focus:outline-none">
           Contact
         </button>
       </div>

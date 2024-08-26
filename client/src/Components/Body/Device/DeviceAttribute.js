@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const DeviceParameter = ({
-  parameterKey,
-  parameterValue,
+const DeviceAttribute = ({
+  attributeKey,
+  attributeValue,
   isOpen,
   onToggleMenu,
   onCloseMenu,
@@ -33,10 +33,13 @@ const DeviceParameter = ({
   }, [isOpen, onCloseMenu]);
 
   return (
-    <div className="bg-gray-100 p-2 rounded bg-white shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group">
-      <div className="font-semibold mb-2 flex justify-between">
-        <span>{parameterKey}:</span>
-        <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+    <div className="bg-gray-100 rounded p-4 bg-white shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group">
+      <div className="flex justify-between">
+        <span className="font-semibold break-words overflow-hidden text-ellipsis">
+          {attributeKey}
+        </span>
+
+        <div className="flex opacity-0 group-hover:opacity-100 transition-opacity duration-100">
           <button onClick={toggleExpand} className="relative z-10">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +76,7 @@ const DeviceParameter = ({
         {isOpen && (
           <div
             ref={menuRef}
-            className="absolute right-1 top-8 bg-white border border-gray-300 rounded shadow-lg z-20 w-24"
+            className="absolute right-6 top-9 bg-white border border-gray-200 rounded shadow-lg z-20 w-24"
           >
             <ul className="py-1">
               <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
@@ -89,9 +92,9 @@ const DeviceParameter = ({
           </div>
         )}
       </div>
-      <div className="break-words flex-grow">{parameterValue}</div>
+      <div className="break-words flex-grow">{attributeValue}</div>
     </div>
   );
 };
 
-export default DeviceParameter;
+export default DeviceAttribute;
