@@ -6,6 +6,7 @@ const DeviceAttribute = ({
   isOpen,
   onToggleMenu,
   onCloseMenu,
+  darkMode,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const menuRef = useRef(null);

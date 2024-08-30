@@ -16,7 +16,7 @@ function App() {
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Body />
+      <Body darkMode={darkMode}/>
       <Footer />
     </div>
   );

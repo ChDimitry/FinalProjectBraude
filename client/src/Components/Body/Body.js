@@ -6,7 +6,7 @@ import DeviceNode from "./Device/DeviceNode.js"; // Import the DeviceNode compon
 // Initialize the WebSocket connection (replace with your server URL)
 const socket = io("http://localhost:5000");
 
-const Body = () => {
+const Body = ({ darkMode }) => {
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
 
@@ -35,11 +35,10 @@ const Body = () => {
   const handleDeviceClick = (device) => {
     setSelectedDevice(device);
   };
-
   return (
     <div className="flex flex-col md:flex-row h-[900px] gap-4 p-4">
       <div className="w-full md:w-[20%]">
-        <div className="p-4 h-full bg-gray-100 rounded">
+        <div className={`p-4 h-full ${darkMode ? 'bg-[#304463] rounded' : 'bg-grey-100 rounded'}`}>
           <h1 className="text-lg font-bold p-2">DEVICES</h1>
           <table className="table-fixed">
             <thead className="">
@@ -116,7 +115,7 @@ const Body = () => {
       </div>
 
       <div className="w-full md:w-[25%]">
-        <div className="p-4 w-full h-full bg-gray-100 rounded">
+        <div className={`p-4 h-full ${darkMode ? 'bg-[#304463] rounded' : 'bg-grey-100 rounded'}`}>
           <div className="flex justify-between mb-3 items-center">
             {" "}
             <h1 className="text-lg font-bold p-2">DEVICE ATTRIBUTES</h1>
@@ -130,7 +129,7 @@ const Body = () => {
             )}
           </div>
           {selectedDevice ? (
-            <Device device={selectedDevice} />
+            <Device device={selectedDevice} darkMode={darkMode} />
           ) : (
             <p>Select a device to see its details.</p>
           )}

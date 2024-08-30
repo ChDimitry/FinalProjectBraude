@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const Device = ({ device }) => {
+const Device = ({ device, darkMode }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null); // Track the open menu
 
   const handleMenuToggle = (key) => {
@@ -96,6 +96,7 @@ const Device = ({ device }) => {
                   isOpen={openMenuKey === key}
                   onToggleMenu={() => handleMenuToggle(key)}
                   onCloseMenu={() => setOpenMenuKey(null)}
+                  darkMode = {darkMode}
                 />
               );
             }
@@ -112,9 +113,9 @@ const Device = ({ device }) => {
             return (
               <ResponsiveContainer key={index} width="100%" height={200}>
                 <BarChart data={[data]}>
-                  <XAxis dataKey="name" />
-                  <YAxis domain={[0, maxValue]} />
-                  <Bar dataKey="value" fill="#304463" />
+                  <XAxis dataKey="name" stroke={`${darkMode ? '#ffffff' : 'grey'}`}/>
+                  <YAxis domain={[0, maxValue]} stroke={`${darkMode ? '#ffffff' : 'grey'}`} />
+                  <Bar dataKey="value" fill={`${darkMode ? '#ffffff' : '#304463'}`} />
                 </BarChart>
               </ResponsiveContainer>
             );
