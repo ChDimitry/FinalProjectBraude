@@ -1,15 +1,12 @@
-// DeviceNode.js
 import React from "react";
 
-const DeviceNode = ({ device, index, onClick }) => {
+const DeviceNode = ({ device, index, onClick, style }) => {
   return (
     <div
       onClick={() => onClick(device)}
       className="cursor-pointer"
       style={{
-        position: "absolute",
-        left: `${index * 40 + 10}px`, // Staggered positioning for visual distinction
-        top: "20px",
+        position: 'absolute',
         width: "30px",
         height: "30px",
         borderRadius: "50%",
@@ -18,9 +15,10 @@ const DeviceNode = ({ device, index, onClick }) => {
         justifyContent: "center",
         alignItems: "center",
         color: "white",
+        ...style,
       }}
     >
-      {device.type[0]}
+      {index}
     </div>
   );
 };

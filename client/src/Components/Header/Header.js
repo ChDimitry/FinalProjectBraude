@@ -1,23 +1,12 @@
 // Header.js
 import React from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
-
+import logo_image from "../../Assets/Logo/logo_blue.png";
 const Header = ({ darkMode, toggleDarkMode }) => {
   return (
     <header className="flex justify-between items-center h-20 shadow-md">
-      <div className="relative flex justify-start items-end h-full left-[12px]">
-        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE]  focus:outline-none">
-          Home
-        </button>
-        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE] focus:outline-none">
-          Devices
-        </button>
-        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE] focus:outline-none">
-          About Us
-        </button>
-        <button className="h-10 w-24 mx-1 text-[#373A40] bg-[#EEEEEE] focus:outline-none">
-          Contact
-        </button>
+      <div className="relative flex justify-start items-center h-full left-[12px]">
+        <img src={logo_image} alt="logo" className="mt-3"/>
       </div>
 
       <button
