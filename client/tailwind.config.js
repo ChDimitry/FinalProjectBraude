@@ -8,7 +8,8 @@ module.exports = {
         max: "max-content",
       },
       backgroundImage: {
-        map: "url('Assets/Map/map.png')",
+        map: "url('Assets/Map/mapWhite.png')",
+        mapDark: "url('Assets/Map/mapDark.png')",
       },
     },
   },
