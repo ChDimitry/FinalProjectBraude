@@ -56,6 +56,7 @@ app.use("/cors-anywhere", (req, res) => {
 const API_URL = "http://172.16.101.172:1026/ngsi-ld/v1/entities/?local=true";
 
 let cachedData = null;
+let totalDataSent = 0; // Track total data sent for speed calculation
 
 // Function to fetch data from the API
 const fetchDevices = async () => {
@@ -72,15 +73,26 @@ const fetchDevices = async () => {
       }
     );
     cachedData = response.data;
+    const dataSize = JSON.stringify(cachedData).length; // Calculate the size of the data
+    totalDataSent += dataSize; // Increment total data sent
+    
     io.emit("devices", cachedData); // Broadcast the data to all connected clients
   } catch (error) {
     console.error("Error fetching data from external API:", error.message);
   }
 };
 
+// Function to calculate and emit transfer speed
+const calculateAndEmitSpeed = () => {
+  const transferSpeed = totalDataSent / 5; // Calculate speed (data per second)
+  io.emit("transferSpeed", transferSpeed);
+  totalDataSent = 0; // Reset total data sent
+};
+
 // Fetch data initially and then every 5 seconds
 fetchDevices();
 setInterval(fetchDevices, 5000);
+setInterval(calculateAndEmitSpeed, 5000); // Calculate and emit speed every 5 seconds
 
 io.on("connection", (socket) => {
   console.log("New client connected");
@@ -89,6 +101,7 @@ io.on("connection", (socket) => {
   if (cachedData) {
     socket.emit("devices", cachedData);
   }
+  
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");

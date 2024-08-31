@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import DeviceAttribute from "./DeviceAttribute";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+
+import BarChart from "../../Graphs/BarChart";
 
 const Device = ({ device, darkMode }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null); // Track the open menu
@@ -107,19 +101,10 @@ const Device = ({ device, darkMode }) => {
 
       {/* Charts Section */}
       {device.type === "AirQualitySensor" && (
-        <div className="md:h-[30%] ml-[-20px] mb-2 flex">
-          {chartData.map((data, index) => {
-            const maxValue = Math.round(1.2 * Math.ceil(data.value));
-            return (
-              <ResponsiveContainer key={index} width="100%" height={200}>
-                <BarChart data={[data]}>
-                  <XAxis dataKey="name" stroke={`${darkMode ? '#ffffff' : 'grey'}`}/>
-                  <YAxis domain={[0, maxValue]} stroke={`${darkMode ? '#ffffff' : 'grey'}`} />
-                  <Bar dataKey="value" fill={`${darkMode ? '#ffffff' : '#304463'}`} />
-                </BarChart>
-              </ResponsiveContainer>
-            );
-          })}
+        <div className="md:h-[30%] ml-[-20px] mb-4 flex">
+          {chartData.map((data, index) => (
+            <BarChart key={index} data={data} darkMode={darkMode} />
+          ))}
         </div>
       )}
     </div>
