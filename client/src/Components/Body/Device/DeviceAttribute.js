@@ -32,9 +32,9 @@ const DeviceAttribute = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onCloseMenu]);
-
+  
   return (
-    <div className="bg-gray-100 rounded p-4 bg-white shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group">
+    <div className={`p-4 ${ darkMode ? "bg-[#50698f]" : "bg-white"} shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group`}>
       <div className="flex justify-between">
         <span className="font-semibold break-words overflow-hidden text-ellipsis">
           {attributeKey}
