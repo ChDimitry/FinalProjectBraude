@@ -73,6 +73,7 @@ const Device = ({ device, darkMode }) => {
             isMenuOpen={openMenuKey === "type"}
             onToggleMenu={() => handleMenuToggle("type")}
             onCloseMenu={() => setOpenMenuKey(null)}
+            darkMode = {darkMode}
           />
           {Object.keys(device).map((key) => {
             const parsedAttribute = parseAttribute(

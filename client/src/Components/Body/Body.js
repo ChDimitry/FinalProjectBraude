@@ -67,13 +67,9 @@ const Body = ({ darkMode }) => {
 
       <div className="flex flex-col md:flex-row h-[900px] gap-4 p-4">
         <div className="w-full md:w-[20%]">
-          <div
-            className={`p-4 h-full ${
-              darkMode ? "bg-[#304463] rounded" : "bg-gray-100 rounded"
-            }`}
-          >
-            <h1 className="text-lg text-[#304463] font-bold p-2">DEVICES</h1>
-            <table className="table-auto w-full">
+          <div className={`p-4 h-full ${ darkMode ? "bg-[#304463] rounded" : "bg-gray-100 rounded"}`}>
+            <h1 className={`text-lg text-${ darkMode ? "[#ffffff]" : "[#304463]"} font-bold p-2`}>DEVICES</h1>
+            <table className="table-fixed">
               <thead className="">
                 <tr>
                   <th className="text-left p-2 ">#</th>
@@ -132,6 +128,7 @@ const Body = ({ darkMode }) => {
                   9: [60, 60],
                 };
 
+
                 const position = positions[index] || [0, 0]; // Default position if undefined
                 const isSelected = device === selectedDevice;
                 return (
@@ -158,9 +155,8 @@ const Body = ({ darkMode }) => {
             }`}
           >
             <div className="flex justify-between mb-3 items-center">
-              <h1 className="text-lg font-bold p-2 text-[#304463]">
-                DEVICE ATTRIBUTES
-              </h1>
+
+              <h1 className={`text-lg text-${ darkMode ? "[#ffffff]" : "[#304463]"} font-bold p-2`}>DEVICE ATTRIBUTES</h1>
               {selectedDevice && (
                 <button
                   onClick={() => setSelectedDevice(null)}
