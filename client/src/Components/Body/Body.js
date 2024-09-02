@@ -111,8 +111,8 @@ const Body = ({ darkMode }) => {
         </div>
 
         <div className="w-full md:w-[55%]">
-          <div className="p-4 h-full bg-white relative bg-map bg-contain bg-no-repeat bg-center border-2 rounded border border-gray-100">
-            {devices &&
+        <div className={`p-4 h-full relative ${ darkMode ? "bg-[#304463] bg-mapDark" : "bg-white bg-map"} bg-contain bg-no-repeat bg-center border-2 rounded border border-indigo-100`}>
+          {devices &&
               devices.length > 0 &&
               devices.map((device, index) => {
                 const positions = {
