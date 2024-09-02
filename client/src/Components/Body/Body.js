@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import io from "socket.io-client";
 import Device from "./Device/Device.js";
 import DeviceNode from "./Device/DeviceNode.js";
+import { AppDarkMode } from '../../App'; 
 
 
 import ServerSpeedWidget from "../Widgets/ServerSpeedWidget.js";
@@ -10,10 +11,12 @@ import ActiveDevicesWidget from "../Widgets/ActiveDevicesWidget.js";
 // Initialize the WebSocket connection (replace with your server URL)
 const socket = io("http://localhost:5000");
 
-const Body = ({ darkMode }) => {
+const Body = () => {
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [transferSpeeds, setTransferSpeeds] = useState([]);
+  
+  const darkMode = useContext(AppDarkMode)
 
   useEffect(() => {
     // Listen for 'devices' events from the server
@@ -167,7 +170,7 @@ const Body = ({ darkMode }) => {
               )}
             </div>
             {selectedDevice ? (
-              <Device device={selectedDevice} darkMode={darkMode} />
+              <Device device={selectedDevice} />
             ) : (
               <p>Select a device to see its details.</p>
             )}

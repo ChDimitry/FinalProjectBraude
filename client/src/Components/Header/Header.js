@@ -1,8 +1,13 @@
 // Header.js
-import React from "react";
+import React, { useContext } from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
 import logo_image from "../../Assets/Logo/logo_blue.png";
-const Header = ({ darkMode, toggleDarkMode }) => {
+import { AppDarkMode } from '../../App'; 
+
+const Header = ({ toggleDarkMode }) => {
+
+  const darkMode = useContext(AppDarkMode)
+  console.log("here" + darkMode)
   return (
     <header className="flex justify-between items-center h-20">
       <div className="relative flex justify-start items-center h-full p-2">

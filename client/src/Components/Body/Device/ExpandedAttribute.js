@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
+import { AppDarkMode } from '../../../App'; 
 
 const ExpandedAttribute = ({ onToggleExpand }) => {
+  const darkMode = useContext(AppDarkMode)
+
   return (
     <>
       <div className="flex justify-between mb-3 items-top">
-        <h1 className="text-lg font-bold p-2 text-[#304463]">GRAPH CREATION</h1>
+        <h1 className={`text-lg font-bold p-2 ${ darkMode ? "text-[#ffffff]" : "text-[#304463]"}`}>GRAPH CREATION</h1>
 
         <button
           onClick={onToggleExpand}
@@ -13,7 +16,7 @@ const ExpandedAttribute = ({ onToggleExpand }) => {
           Close
         </button>
       </div>
-      <div className="h-fit bg-gray-100 rounded p-4 bg-white shadow-md">
+      <div className={`h-fit rounded p-4 ${ darkMode ? "bg-[#50698f]" : "bg-white"} shadow-md`}>
         Output different types of graphs here...
       </div>
     </>

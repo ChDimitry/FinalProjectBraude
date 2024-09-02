@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import ExpandedAttribute from "./ExpandedAttribute";
+import { AppDarkMode } from '../../../App'; 
 
 const DeviceAttribute = ({
   attributeKey,
@@ -7,11 +8,12 @@ const DeviceAttribute = ({
   isMenuOpen,
   onToggleMenu,
   onCloseMenu,
-  darkMode,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [animate, setAnimate] = useState(false);
   const menuRef = useRef(null);
+
+  const darkMode = useContext(AppDarkMode)
 
   const onToggleExpand = () => {
     if (expanded) {
@@ -108,7 +110,7 @@ const DeviceAttribute = ({
       </div>
       {expanded && (
         <div
-          className="absolute top-[15%] mt-[2px] right-[25%] ml-4 bg-gray-100 bg-opacity-90 h-[868px] w-[600px] p-4 rounded-tl rounded-bl"
+          className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${ darkMode ? "bg-[#445672]" : "bg-gray-100"} bg-opacity-90 h-[868px] w-[600px] p-4 rounded-tl rounded-bl`}
           style={{
             animation: animate
               ? "slideOut 0.2s ease-out forwards"

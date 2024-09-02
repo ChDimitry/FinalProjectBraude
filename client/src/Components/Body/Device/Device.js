@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DeviceAttribute from "./DeviceAttribute";
 
 import BarChart from "../../Graphs/BarChart";
+import { AppDarkMode } from '../../../App'; 
 
-const Device = ({ device, darkMode }) => {
+const Device = ({ device }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null); // Track the open menu
+
+  const darkMode = useContext(AppDarkMode)
 
   const handleMenuToggle = (key) => {
     setOpenMenuKey(openMenuKey === key ? null : key); // Toggle the menu
@@ -73,7 +76,6 @@ const Device = ({ device, darkMode }) => {
             isMenuOpen={openMenuKey === "type"}
             onToggleMenu={() => handleMenuToggle("type")}
             onCloseMenu={() => setOpenMenuKey(null)}
-            darkMode = {darkMode}
           />
           {Object.keys(device).map((key) => {
             const parsedAttribute = parseAttribute(
