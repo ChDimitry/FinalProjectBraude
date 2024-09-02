@@ -24,8 +24,8 @@ const BarChart = ({ data, darkMode }) => {
             <stop offset="100%" stopColor={darkMode ? "#ffffff" : "#304463"} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <XAxis dataKey="name" stroke={darkMode ? "#ffffff" : "gray"} />
-        <YAxis domain={[maxValue / 20, maxValue]} stroke={darkMode ? "#ffffff" : "gray"} />
+        <XAxis dataKey="name" fontSize={14} stroke={darkMode ? "#ffffff" : "gray"} />
+        <YAxis domain={[maxValue / 2, maxValue]} fontSize={12} stroke={darkMode ? "#ffffff" : "gray"} />
         <Bar
           dataKey="value"
           fill={`url(#${gradientId})`}

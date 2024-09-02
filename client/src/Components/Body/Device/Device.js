@@ -62,15 +62,15 @@ const Device = ({ device, darkMode }) => {
     .filter((item) => item !== null);
 
   return (
-    <div className="flex flex-col gap-3 h-full">
+    <div className="z-10 flex flex-col gap-3 h-full">
       {/* Attributes Section */}
-      <div className="overflow-auto rounded md:h-[70%]">
+      <div className="overflow-auto rounded md:h-[60%]">
         <div className="grid grid-cols-2 gap-3 auto-rows-auto">
           <DeviceAttribute
             key={"type"}
             attributeKey={"DEVICE"}
             attributeValue={device.type}
-            isOpen={openMenuKey === "type"}
+            isMenuOpen={openMenuKey === "type"}
             onToggleMenu={() => handleMenuToggle("type")}
             onCloseMenu={() => setOpenMenuKey(null)}
           />
@@ -87,7 +87,7 @@ const Device = ({ device, darkMode }) => {
                   key={key}
                   attributeKey={displayKey.toUpperCase()}
                   attributeValue={displayValue}
-                  isOpen={openMenuKey === key}
+                  isMenuOpen={openMenuKey === key}
                   onToggleMenu={() => handleMenuToggle(key)}
                   onCloseMenu={() => setOpenMenuKey(null)}
                   darkMode = {darkMode}
@@ -101,7 +101,7 @@ const Device = ({ device, darkMode }) => {
 
       {/* Charts Section */}
       {device.type === "AirQualitySensor" && (
-        <div className="md:h-[30%] ml-[-20px] mb-4 flex">
+        <div className="md:h-[40%] flex flex-row ml-[-25px] mt-[80px]">
           {chartData.map((data, index) => (
             <BarChart key={index} data={data} darkMode={darkMode} />
           ))}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResponsiveContainer, AreaChart, YAxis, Tooltip, Area, defs } from 'recharts';
+import { ResponsiveContainer, AreaChart, YAxis, Area } from 'recharts';
 
 const DynamicLineChart = ({ transferSpeeds }) => {
   if (transferSpeeds.length === 0) {
