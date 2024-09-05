@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import ExpandedAttribute from "./ExpandedAttribute";
-import { AppDarkMode } from '../../../App'; 
+import { AppDarkMode } from "../../../App";
+import DynamicLineChart from "../../Graphs/DynamicLineChart";
 
 const DeviceAttribute = ({
   attributeKey,
@@ -12,8 +13,28 @@ const DeviceAttribute = ({
   const [expanded, setExpanded] = useState(false);
   const [animate, setAnimate] = useState(false);
   const menuRef = useRef(null);
+  const darkMode = useContext(AppDarkMode);
+  const [attributeValues, setAttributeValues] = useState([]);
 
-  const darkMode = useContext(AppDarkMode)
+  useEffect(() => {
+    // Ensure attributeValue exists before updating
+    if (attributeValue === undefined) return;
+  
+    // Create a new entry for the current attribute value
+    const newEntry = { value: attributeValue, timestamp: Date.now() };
+    
+    setAttributeValues((prev) => {
+      const updatedValues = [...prev, newEntry];
+  
+      // Limit the number of values to display
+      if (updatedValues.length > 100) {
+        updatedValues.shift();
+      }
+  
+      return updatedValues;
+    });
+  }, [attributeValue]);
+  
 
   const onToggleExpand = () => {
     if (expanded) {
@@ -48,7 +69,11 @@ const DeviceAttribute = ({
 
   return (
     <>
-      <div className={`p-4 ${ darkMode ? "bg-[#50698f]" : "bg-white"} shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group`}>
+      <div
+        className={`p-4 ${
+          darkMode ? "bg-[#50698f]" : "bg-white"
+        } shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group`}
+      >
         <div className="flex justify-between">
           <span className="font-semibold break-words overflow-hidden text-ellipsis">
             {attributeKey}
@@ -110,14 +135,21 @@ const DeviceAttribute = ({
       </div>
       {expanded && (
         <div
-          className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${ darkMode ? "bg-[#445672]" : "bg-gray-100"} bg-opacity-90 h-[868px] w-[600px] p-4 rounded-tl rounded-bl`}
+          className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${
+            darkMode ? "bg-[#445672]" : "bg-gray-100"
+          } bg-opacity-90 h-[868px] w-[800px] p-4 rounded-tl rounded-bl`}
           style={{
             animation: animate
               ? "slideOut 0.2s ease-out forwards"
               : "slideIn 0.2s ease-out forwards",
           }}
         >
-          <ExpandedAttribute onToggleExpand={onToggleExpand} />
+          <ExpandedAttribute
+            onToggleExpand={onToggleExpand}
+            attributeKey={attributeKey}
+            attributeValue={attributeValue}
+            attributeValuesList={attributeValues}
+          />
         </div>
       )}
     </>

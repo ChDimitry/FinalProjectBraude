@@ -89,7 +89,6 @@ const calculateAndEmitSpeed = () => {
   totalDataSent = 0; // Reset total data sent
 };
 
-// Fetch data initially and then every 5 seconds
 fetchDevices();
 setInterval(fetchDevices, 5000);
 setInterval(calculateAndEmitSpeed, 5000); // Calculate and emit speed every 5 seconds

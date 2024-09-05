@@ -22,7 +22,6 @@ const Body = () => {
     // Listen for 'devices' events from the server
     socket.on("devices", (data) => {
       setDevices(data);
-
       // Automatically update the selected device data if it is still in the list
       if (selectedDevice) {
         const updatedDevice = data.find(
@@ -130,7 +129,6 @@ const Body = () => {
                   8: [35, 70],
                   9: [60, 60],
                 };
-
 
                 const position = positions[index] || [0, 0]; // Default position if undefined
                 const isSelected = device === selectedDevice;

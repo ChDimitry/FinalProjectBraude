@@ -1,5 +1,5 @@
 import React from "react";
-import DynamicLineChart from "../Graphs/DynamicLineChart";
+import SimplifiedLineChart from "../Graphs/SimplifiedLineChart";
 
 const ServerSpeedWidget = ({ transferSpeeds }) => {
   return (
@@ -9,7 +9,7 @@ const ServerSpeedWidget = ({ transferSpeeds }) => {
           ? `${transferSpeeds[transferSpeeds.length - 1].speed} Bytes/s`
           : "No data"}
       </p>
-      <DynamicLineChart transferSpeeds={transferSpeeds} />
+      <SimplifiedLineChart transferSpeeds={transferSpeeds} />
     </div>
   );
 };
