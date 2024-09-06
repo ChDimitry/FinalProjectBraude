@@ -4,6 +4,8 @@ import { AppDarkMode } from "../../../App";
 import DynamicLineChart from "../../Graphs/DynamicLineChart";
 
 const DeviceAttribute = ({
+  deviceID,
+  deviceType,
   attributeKey,
   attributeValue,
   isMenuOpen,
@@ -15,26 +17,26 @@ const DeviceAttribute = ({
   const menuRef = useRef(null);
   const darkMode = useContext(AppDarkMode);
   const [attributeValues, setAttributeValues] = useState([]);
+  const [lastUpdated, setLastUpdated] = useState(Date.now());
 
   useEffect(() => {
     // Ensure attributeValue exists before updating
     if (attributeValue === undefined) return;
-  
+
     // Create a new entry for the current attribute value
     const newEntry = { value: attributeValue, timestamp: Date.now() };
-    
+    setLastUpdated(newEntry.timestamp);
     setAttributeValues((prev) => {
       const updatedValues = [...prev, newEntry];
-  
+
       // Limit the number of values to display
-      if (updatedValues.length > 100) {
+      if (updatedValues.length > 25) {
         updatedValues.shift();
       }
-  
+
       return updatedValues;
     });
   }, [attributeValue]);
-  
 
   const onToggleExpand = () => {
     if (expanded) {
@@ -70,15 +72,20 @@ const DeviceAttribute = ({
   return (
     <>
       <div
-        className={`p-4 ${
-          darkMode ? "bg-[#50698f]" : "bg-white"
-        } shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group`}
+        className={`p-4 shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group
+          ${darkMode ? "bg-[#50698f]" : "bg-white"} 
+           
+          `}
       >
         <div className="flex justify-between">
           <span className="font-semibold break-words overflow-hidden text-ellipsis">
             {attributeKey}
           </span>
-          <div className="z-10 flex opacity-0 group-hover:opacity-100 transition-opacity duration-100">
+          <div
+            className={`z-10 ${
+              expanded ? "opacity-100" : "opacity-0"
+            } flex group-hover:opacity-100 transition-opacity duration-100`}
+          >
             <button onClick={onToggleExpand} className="relative z-10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +119,7 @@ const DeviceAttribute = ({
               </svg>
             </button>
           </div>
+
           {isMenuOpen && (
             <div
               ref={menuRef}
@@ -132,12 +140,17 @@ const DeviceAttribute = ({
           )}
         </div>
         <div className="break-words flex-grow">{attributeValue}</div>
+        {attributeKey.includes("VALUE") && (
+          <span className="text-xs text-gray-500">
+            Last Update: {new Date(lastUpdated).toLocaleTimeString()}
+          </span>
+        )}
       </div>
       {expanded && (
         <div
           className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${
             darkMode ? "bg-[#445672]" : "bg-gray-100"
-          } bg-opacity-90 h-[868px] w-[800px] p-4 rounded-tl rounded-bl`}
+          } bg-opacity-90 h-[868px] w-[800px] p-4 rounded-tl rounded-bl overflow-auto`}
           style={{
             animation: animate
               ? "slideOut 0.2s ease-out forwards"
@@ -146,6 +159,8 @@ const DeviceAttribute = ({
         >
           <ExpandedAttribute
             onToggleExpand={onToggleExpand}
+            deviceID={deviceID}
+            deviceType={deviceType}
             attributeKey={attributeKey}
             attributeValue={attributeValue}
             attributeValuesList={attributeValues}

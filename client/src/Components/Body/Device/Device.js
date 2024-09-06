@@ -2,12 +2,12 @@ import React, { useContext, useState } from "react";
 import DeviceAttribute from "./DeviceAttribute";
 
 import BarChart from "../../Graphs/BarChart";
-import { AppDarkMode } from '../../../App'; 
+import { AppDarkMode } from "../../../App";
 
 const Device = ({ device }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null); // Track the open menu
 
-  const darkMode = useContext(AppDarkMode)
+  const darkMode = useContext(AppDarkMode);
 
   const handleMenuToggle = (key) => {
     setOpenMenuKey(openMenuKey === key ? null : key); // Toggle the menu
@@ -65,7 +65,7 @@ const Device = ({ device }) => {
     .filter((item) => item !== null);
 
   return (
-    <div className="z-10 flex flex-col gap-3 h-full">
+    <div className="z-10 flex flex-col gap-3 h-full h-[800px]">
       {/* Attributes Section */}
       <div className="overflow-auto rounded md:h-[60%]">
         <div className="grid grid-cols-2 gap-3 auto-rows-auto">
@@ -88,12 +88,14 @@ const Device = ({ device }) => {
               return (
                 <DeviceAttribute
                   key={key}
+                  deviceID={device.id.split(":").slice(-2).join(":")}
+                  deviceType={device.type}
                   attributeKey={displayKey.toUpperCase()}
                   attributeValue={displayValue}
                   isMenuOpen={openMenuKey === key}
                   onToggleMenu={() => handleMenuToggle(key)}
                   onCloseMenu={() => setOpenMenuKey(null)}
-                  darkMode = {darkMode}
+                  darkMode={darkMode}
                 />
               );
             }
@@ -101,10 +103,10 @@ const Device = ({ device }) => {
           })}
         </div>
       </div>
-
+      <hr class="w-[400px] h-1 mx-auto my-4 bg-gray-200 border-0 rounded md:my-5 dark:bg-gray-700"></hr>
       {/* Charts Section */}
       {device.type === "AirQualitySensor" && (
-        <div className="md:h-[40%] flex flex-row ml-[-25px] mt-[80px]">
+        <div className="self-stretch md:h-[50px] flex flex-row ml-[-25px]">
           {chartData.map((data, index) => (
             <BarChart key={index} data={data} darkMode={darkMode} />
           ))}

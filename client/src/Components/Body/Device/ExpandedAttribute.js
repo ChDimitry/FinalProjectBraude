@@ -3,6 +3,8 @@ import { AppDarkMode } from "../../../App";
 import DynamicLineChart from "../../Graphs/DynamicLineChart";
 
 const ExpandedAttribute = ({
+  deviceID,
+  deviceType,
   onToggleExpand,
   attributeKey,
   attributeValue,
@@ -17,20 +19,16 @@ const ExpandedAttribute = ({
   const [endDate, setEndDate] = useState("");
   const [lastXValues, setLastXValues] = useState("");
 
-  // Function to submit the filter form
-  const submitForm = () => {
-    // Validate the form fields
-    if (startTime === "" || endTime === "" || startDate === "" || endDate === "" || lastXValues === "") {
-      document.getElementById("attribute-graph-submit-error-message").innerText = "Please fill in all fields";
-      return;
-    }
+  // Submit functions for each form
+  const submitTimeFilter = async () => {};
 
-  };
+  const submitDateFilter = async () => {};
 
+  const submitLastXValues = async () => {};
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex justify-between mb-3 items-top">
+      <div className="flex justify-between mb-3 items-top overflow-auto ">
         <h1
           className={`text-lg font-bold p-2 ${
             darkMode ? "text-[#ffffff]" : "text-[#304463]"
@@ -47,19 +45,19 @@ const ExpandedAttribute = ({
         </button>
       </div>
 
-      {/* Graph Filter Form */}
+      {/* Graph Filter Form - Time */}
       <div
         className={`h-fit rounded p-4 ${
           darkMode ? "bg-[#50698f]" : "bg-white"
         } shadow-md`}
       >
-        <div className="grid grid-cols-2 gap-3 auto-rows-auto pb-5">
-          {/* Start/End Time */}
+        <div className="grid grid-cols-[20px,2fr,2fr,1fr] gap-3">
+          <span class="self-center flex w-3 h-3 me-3 bg-blue-600 rounded-full"></span>
           <div>
             <label>Start Time</label>
             <input
               type="time"
-              className="border p-1 ml-3 rounded"
+              className="border p-1 ml-3 rounded focus:outline-none"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
             />
@@ -68,18 +66,33 @@ const ExpandedAttribute = ({
             <label>End Time</label>
             <input
               type="time"
-              className="border p-1 ml-3 rounded"
+              className="border p-1 ml-3 rounded focus:outline-none"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
             />
           </div>
+          <button
+            onClick={submitTimeFilter}
+            className="w-fit h-fit text-gray-900 border border-gray-200 hover:bg-white hover:border-gray-300 rounded text-sm px-4 py-2"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
 
-          {/* Start/End Date */}
+      {/* Graph Filter Form - Date */}
+      <div
+        className={`h-fit rounded p-4 ${
+          darkMode ? "bg-[#50698f]" : "bg-white"
+        } shadow-md`}
+      >
+        <div className="grid grid-cols-[20px,2fr,2fr,1fr] gap-3">
+          <span class="self-center flex w-3 h-3 me-3 bg-yellow-300 rounded-full"></span>
           <div>
             <label>Start Date</label>
             <input
               type="date"
-              className="border p-1 ml-3 rounded"
+              className="border p-1 ml-3 rounded focus:outline-none"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
@@ -88,28 +101,46 @@ const ExpandedAttribute = ({
             <label>End Date</label>
             <input
               type="date"
-              className="border p-1 ml-3 rounded"
+              className="border p-1 ml-3 rounded focus:outline-none"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
+          <button
+            onClick={submitDateFilter}
+            className="w-fit h-fit text-gray-900 border border-gray-200 hover:bg-white hover:border-gray-300 rounded text-sm px-4 py-2"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
 
-          {/* Last X Values */}
+      {/* Graph Filter Form - Last X Values */}
+      <div
+        className={`h-fit rounded p-4 ${
+          darkMode ? "bg-[#50698f]" : "bg-white"
+        } shadow-md`}
+      >
+        <div className="grid grid-cols-[20px,2fr,2fr,1fr] gap-3">
+          <span class="self-center flex w-3 h-3 me-3 bg-teal-500 rounded-full"></span>
           <div>
             <label>Last X Values</label>
             <input
               type="number"
-              className="border p-1 ml-3 rounded w-[80px]"
+              className="border p-1 ml-3 rounded w-[100px] focus:outline-none"
               placeholder="Enter X"
               value={lastXValues}
               onChange={(e) => setLastXValues(e.target.value)}
             />
           </div>
+          <empty></empty>
+          <button
+            onClick={submitLastXValues}
+            className="w-fit h-fit text-gray-900 border border-gray-200 hover:bg-white hover:border-gray-300 rounded text-sm px-4 py-2"
+          >
+            Submit
+          </button>
         </div>
-        <button onClick={submitForm} className="h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-          Submit
-        </button>{" "}
-        <span id="attribute-graph-submit-error-message" className="text-red-500 ml-2"></span>
       </div>
 
       {/* Graph Display */}
@@ -118,7 +149,9 @@ const ExpandedAttribute = ({
           darkMode ? "bg-[#50698f]" : "bg-white"
         } shadow-md`}
       >
-        <p>{attributeKey}</p>
+        <p>
+          {attributeKey} ({attributeValue})
+        </p>
         <DynamicLineChart values={attributeValuesList} />
       </div>
     </div>
