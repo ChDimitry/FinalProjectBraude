@@ -20,7 +20,7 @@ const Device = ({ device }) => {
 
     displayKey = key
       .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase());
+      .replace(/\b\w/g, (c) => c);
     if (displayKey.toLowerCase().includes("entity")) {
       displayKey = "Entity Type";
     }
@@ -90,7 +90,7 @@ const Device = ({ device }) => {
                   key={key}
                   deviceID={device.id.split(":").slice(-2).join(":")}
                   deviceType={device.type}
-                  attributeKey={displayKey.toUpperCase()}
+                  attributeKey={displayKey}
                   attributeValue={displayValue}
                   isMenuOpen={openMenuKey === key}
                   onToggleMenu={() => handleMenuToggle(key)}

@@ -1,13 +1,32 @@
 import React from "react";
 import { ResponsiveContainer, AreaChart, YAxis, Area, Tooltip } from "recharts";
 
+// Custom tooltip component with formatted timestamp
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const { value, timestamp } = payload[0].payload; // Extract value and timestamp
+
+    // Format timestamp
+    const date = new Date(timestamp);
+    const formattedDate = date.toLocaleDateString("en-GB").replace(/\//g, "/"); // "yy/mm/dd"
+    const formattedTime = date.toLocaleTimeString("en-GB", { hour12: false }); // "h:m:s"
+
+    return (
+      <div className="bg-white border p-2 rounded shadow-md">
+        <p>{`${formattedDate} ${formattedTime}`}</p>
+        <p>{`${value}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+
 const DynamicLineChart = ({ values }) => {
   if (values.length === 0) {
     return null; // Return null if there is no data
   }
-
-  // Debugging: log the values to ensure data is passed correctly
-  console.log("Chart values:", values);
 
   // Calculate the minimum and maximum values
   const minValue = Math.min(...values.map((d) => d.value));
@@ -33,7 +52,8 @@ const DynamicLineChart = ({ values }) => {
           </linearGradient>
         </defs>
         <YAxis domain={[adjustedMin, adjustedMax]} hide={true} />
-        <Tooltip />
+        {/* Custom Tooltip */}
+        <Tooltip content={<CustomTooltip />} />
         <Area
           type="monotone"
           dataKey="value"
