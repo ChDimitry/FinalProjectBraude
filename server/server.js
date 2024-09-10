@@ -156,7 +156,7 @@ io.on("connection", (socket) => {
           new Date(endDateTime)
         );
 
-        const formattedKey = attributeKey.replace(/ /g, "_");
+        const formattedKey = attributeKey
 
         const times = fetchedData.index;
         const attributes = fetchedData.attributes;

@@ -140,8 +140,8 @@ const DeviceAttribute = ({
           )}
         </div>
         <div className="break-words flex-grow">{attributeValue}</div>
-        {attributeKey.includes("VALUE") && (
-          <span className="text-xs text-gray-500">
+        {attributeKey.includes("value") && (
+          <span className="text-xs text-gray-500 h-4">
             Last Update: {new Date(lastUpdated).toLocaleTimeString()}
           </span>
         )}

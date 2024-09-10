@@ -18,13 +18,6 @@ const Device = ({ device }) => {
     let displayKey = key;
     let displayValue = null;
 
-    displayKey = key
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c);
-    if (displayKey.toLowerCase().includes("entity")) {
-      displayKey = "Entity Type";
-    }
-
     // Extract the "value" field from the JSON object if it exists
     try {
       const parsedValue = JSON.parse(value);
