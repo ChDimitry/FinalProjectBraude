@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import io from "socket.io-client";
 import ExpandedAttribute from "./ExpandedAttribute";
 import { AppDarkMode } from "../../../App";
 import DynamicLineChart from "../../Graphs/DynamicLineChart";
 
 const DeviceAttribute = ({
+  socket, // Use the passed socket
   deviceID,
   deviceType,
   attributeKey,
@@ -11,9 +13,8 @@ const DeviceAttribute = ({
   isMenuOpen,
   onToggleMenu,
   onCloseMenu,
+  onExpandCompare,
 }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [animate, setAnimate] = useState(false);
   const menuRef = useRef(null);
   const darkMode = useContext(AppDarkMode);
   const [attributeValues, setAttributeValues] = useState([]);
@@ -38,19 +39,18 @@ const DeviceAttribute = ({
     });
   }, [attributeValue]);
 
-  const onToggleExpand = () => {
-    if (expanded) {
-      // Trigger slide-out animation first
-      setAnimate(true);
-      setTimeout(() => {
-        setExpanded(false);
-        setAnimate(false);
-      }, 200);
-    } else {
-      setExpanded(true);
-    }
+  const handleCompare = () => {
+    const data = {
+      deviceID: deviceID,
+      deviceType: deviceType,
+      attributeKey: attributeKey,
+      attributeValue: attributeValue,
+    };
+    socket.emit("selectedDeviceData", data);
+    onExpandCompare();
+    // console.log("Emitting selectedDeviceData:", data);
   };
-
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -78,15 +78,14 @@ const DeviceAttribute = ({
           `}
       >
         <div className="flex justify-between">
+          {/* Attribute Key */}
           <span className="font-semibold break-words overflow-hidden text-ellipsis">
             {attributeKey}
           </span>
           <div
-            className={`z-10 ${
-              expanded ? "opacity-100" : "opacity-0"
-            } flex group-hover:opacity-100 transition-opacity duration-100`}
+            className={`z-10 opacity-0 flex group-hover:opacity-100 transition-opacity duration-100`}
           >
-            <button onClick={onToggleExpand} className="relative z-10">
+            <button onClick={handleCompare} className="relative z-10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -142,11 +141,11 @@ const DeviceAttribute = ({
         <div className="break-words flex-grow">{attributeValue}</div>
         {attributeKey.includes("value") && (
           <span className="text-xs text-gray-500 h-4">
-            Last Update: {new Date(lastUpdated).toLocaleTimeString()}
+            Updated: {new Date(lastUpdated).toLocaleTimeString()}
           </span>
         )}
       </div>
-      {expanded && (
+      {/* {expanded && (
         <div
           className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${
             darkMode ? "bg-[#445672]" : "bg-gray-100"
@@ -166,7 +165,7 @@ const DeviceAttribute = ({
             attributeValuesList={attributeValues}
           />
         </div>
-      )}
+      )} */}
     </>
   );
 };

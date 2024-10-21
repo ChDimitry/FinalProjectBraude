@@ -1,17 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import { AppDarkMode } from "../../../App";
-import DynamicLineChart from "../../Graphs/DynamicLineChart";
-import { io } from "socket.io-client"; // Import socket.io client
+import { AppDarkMode } from "../../App";
+import DynamicLineChart from "../Graphs/DynamicLineChart";
 
-const socket = io("http://localhost:5000"); // Connect to your server
-
-const ExpandedAttribute = ({
-  deviceID,
-  deviceType,
+const DeviceCompareScreen = ({
+  socket,
   onToggleExpand,
-  attributeKey,
-  attributeValue,
-  attributeValuesList,
 }) => {
   const darkMode = useContext(AppDarkMode);
 
@@ -21,6 +14,12 @@ const ExpandedAttribute = ({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [lastXValues, setLastXValues] = useState("");
+  
+  const [deviceID, setDeviceID] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [attributeKey, setAttributeKey] = useState("");
+  const [attributeValue, setAttributeValue] = useState("");
+
 
   // State to store the graphs
   const [graphs, setGraphs] = useState([]);
@@ -47,6 +46,8 @@ const ExpandedAttribute = ({
     });
   };
 
+
+
   // Listen for the filtered data from the server
   useEffect(() => {
     socket.on("graphFilteredData", (data) => {
@@ -59,6 +60,15 @@ const ExpandedAttribute = ({
       setGraphs((prevGraphs) => [newGraphData, ...prevGraphs]);
     });
 
+    socket.on("selectedDeviceData", (data) => {
+      // Handle received data here
+      // console.log("Selected Device Data:", data); 
+      setDeviceID(data.deviceID);
+      setDeviceType(data.deviceType);
+      setAttributeKey(data.attributeKey);
+      setAttributeValue(data.attributeValue);
+    });
+
     socket.on("error", (error) => {
       console.error("Error received from server:", error.message);
       setLoading(false); // Stop loading if there's an error
@@ -68,8 +78,9 @@ const ExpandedAttribute = ({
     return () => {
       socket.off("graphFilteredData");
       socket.off("error");
+      socket.off("selectedDeviceData");
     };
-  }, []);
+  }, [socket]);
 
   // Function to remove a specific graph from the list
   const removeGraph = (indexToRemove) => {
@@ -87,7 +98,7 @@ const ExpandedAttribute = ({
               darkMode ? "text-[#ffffff]" : "text-[#304463]"
             }`}
           >
-            ATTRIBUTE GRAPHS | {attributeKey}
+            ATTRIBUTE GRAPHS | {attributeKey} {deviceID}
           </h1>
           <div className="grid grid-flow-col auto-cols-max gap-3">
             <button className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
@@ -95,13 +106,13 @@ const ExpandedAttribute = ({
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
-                class="size-4"
+                className="size-4"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
                 />
               </svg>
@@ -121,7 +132,7 @@ const ExpandedAttribute = ({
         <div
           className={`h-fit rounded p-4 ${
             darkMode ? "bg-[#50698f]" : "bg-white"
-          } shadow-md `}
+          } shadow-md`}
         >
           <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div>
@@ -174,7 +185,7 @@ const ExpandedAttribute = ({
               onClick={submitGraphFilter}
               className="w-fit h-fit text-gray-900 border border-gray-200 hover:bg-white hover:border-gray-300 rounded text-sm px-4 py-2"
             >
-              Submit
+              Generate
             </button>
           </div>
         </div>
@@ -221,4 +232,4 @@ const ExpandedAttribute = ({
   );
 };
 
-export default ExpandedAttribute;
+export default DeviceCompareScreen;

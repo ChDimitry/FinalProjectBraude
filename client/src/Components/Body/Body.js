@@ -2,11 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import io from "socket.io-client";
 import Device from "./Device/Device.js";
 import DeviceNode from "./Device/DeviceNode.js";
-import { AppDarkMode } from '../../App'; 
-
+import { AppDarkMode } from "../../App";
 
 import ServerSpeedWidget from "../Widgets/ServerSpeedWidget.js";
 import ActiveDevicesWidget from "../Widgets/ActiveDevicesWidget.js";
+import DeviceCompareScreen from "./DeviceCompareScreen.js";
 
 // Initialize the WebSocket connection (replace with your server URL)
 const socket = io("http://localhost:5000");
@@ -15,8 +15,10 @@ const Body = () => {
   const [devices, setDevices] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [transferSpeeds, setTransferSpeeds] = useState([]);
-  
-  const darkMode = useContext(AppDarkMode)
+  const [expanded, setExpanded] = useState(false);
+  const [animate, setAnimate] = useState(false);
+
+  const darkMode = useContext(AppDarkMode);
 
   useEffect(() => {
     // Listen for 'devices' events from the server
@@ -57,6 +59,25 @@ const Body = () => {
     setSelectedDevice(device);
   };
 
+  const onExpandCompare = () => {
+    setExpanded(true);
+  };
+
+  const onToggleExpandCompare = () => {
+    if (expanded) {
+      console.log("Collapsing");
+      // Trigger slide-out animation first
+      setAnimate(true);
+      setTimeout(() => {
+        setExpanded(false);
+        setAnimate(false);
+      }, 200);
+    } else {
+      console.log("Expanding");
+      setExpanded(true);
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row gap-4 p-4">
@@ -69,8 +90,38 @@ const Body = () => {
 
       <div className="flex flex-col md:flex-row h-[900px] gap-4 p-4">
         <div className="w-full md:w-[20%]">
-          <div className={`p-4 h-full ${ darkMode ? "bg-[#304463] rounded" : "bg-gray-100 rounded"}`}>
-            <h1 className={`text-lg text-${ darkMode ? "[#ffffff]" : "[#304463]"} font-bold p-2`}>DEVICES</h1>
+          <div
+            className={`p-4 h-full ${
+              darkMode ? "bg-[#304463] rounded" : "bg-gray-100 rounded"
+            }`}
+          >
+            <div className="flex justify-between mb-3 items-center">
+              <h1
+                className={`text-lg text-${
+                  darkMode ? "[#ffffff]" : "[#304463]"
+                } font-bold p-2`}
+              >
+                DEVICES
+              </h1>
+              <button onClick={onToggleExpandCompare} className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  className="size-5"
+                  stroke="currentColor"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                  <line x1="4" y1="19" x2="20" y2="19" />{" "}
+                  <polyline points="4 15 8 9 12 11 16 6 20 10" />
+                </svg>
+                <span>Compare</span>
+              </button>
+            </div>
             <table className="table-fixed">
               <thead className="">
                 <tr>
@@ -113,8 +164,29 @@ const Body = () => {
         </div>
 
         <div className="w-full md:w-[55%]">
-        <div className={`p-4 h-full relative ${ darkMode ? "bg-[#304463] bg-mapDark" : "bg-white bg-map"} bg-contain bg-no-repeat bg-center border-4 rounded border border-gray-100`}>
-          {devices &&
+          {expanded && (
+            <div
+              className={`absolute md:w-[50%] ${
+                darkMode ? "bg-[#445672]" : "bg-gray-100"
+              } bg-opacity-90 h-[868px] p-4 rounded-tl rounded-bl overflow-auto z-10`}
+              style={{
+                animation: animate
+                  ? "slideOut 0.2s ease-out forwards"
+                  : "slideIn 0.2s ease-out forwards",
+              }}
+            >
+              <DeviceCompareScreen
+                socket={socket}
+                onToggleExpand={onToggleExpandCompare}
+              />
+            </div>
+          )}
+          <div
+            className={`p-4 h-full relative ${
+              darkMode ? "bg-[#304463] bg-mapDark" : "bg-white bg-map"
+            } bg-contain bg-no-repeat bg-center border-4 rounded border border-gray-100`}
+          >
+            {devices &&
               devices.length > 0 &&
               devices.map((device, index) => {
                 const positions = {
@@ -156,8 +228,13 @@ const Body = () => {
             }`}
           >
             <div className="flex justify-between mb-3 items-center">
-
-              <h1 className={`text-lg text-${ darkMode ? "[#ffffff]" : "[#304463]"} font-bold p-2`}>DEVICE ATTRIBUTES</h1>
+              <h1
+                className={`text-lg text-${
+                  darkMode ? "[#ffffff]" : "[#304463]"
+                } font-bold p-2`}
+              >
+                DEVICE ATTRIBUTES
+              </h1>
               {selectedDevice && (
                 <button
                   onClick={() => setSelectedDevice(null)}
@@ -168,7 +245,11 @@ const Body = () => {
               )}
             </div>
             {selectedDevice ? (
-              <Device device={selectedDevice} />
+              <Device
+                socket={socket}
+                onExpandCompare={onExpandCompare}
+                device={selectedDevice}
+              />
             ) : (
               <p>Select a device to see its details.</p>
             )}

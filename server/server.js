@@ -128,6 +128,17 @@ setInterval(calculateAndEmitSpeed, 5000); // Calculate and emit speed every 5 se
 io.on("connection", (socket) => {
   console.log("New client connected");
 
+  // Listen for 'selectedDeviceData' from the client
+  socket.on("selectedDeviceData", (data) => {
+    // console.log("Selected Device Data received:", data);
+
+    // Broadcast the data to all other clients (excluding the sender)
+    // socket.broadcast.emit("selectedDeviceData", data);
+    
+    // If you want to send it to all clients, including the sender, use:
+    io.emit("selectedDeviceData", data);
+  });
+
   // Listen for 'filterData' event from the client
   socket.on(
     "graphFilterData",
