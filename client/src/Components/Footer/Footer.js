@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="p-5 text-center border-t">
+    <footer className="p-5 text-center">
       {/* Contact Information */}
       <p>1234 Elm Street</p> 
       <p>Omaha, NE 68124</p>

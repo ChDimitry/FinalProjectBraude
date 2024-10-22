@@ -50,6 +50,18 @@ const DeviceAttribute = ({
     onExpandCompare();
     // console.log("Emitting selectedDeviceData:", data);
   };
+
+  const handleAttributePin = () => {
+    const data = {
+      deviceID: deviceID,
+      attributeKey: attributeKey,
+      attributeValue: attributeValue,
+    };
+    socket.emit("pinAttribute", data);
+    onCloseMenu();
+    // console.log("Emitting pinAttribute:", data);
+  }
+
   
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -125,7 +137,7 @@ const DeviceAttribute = ({
               className="absolute right-6 top-9 bg-white border border-gray-200 rounded shadow-lg z-20 w-24"
             >
               <ul className="py-1">
-                <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
+                <li onClick={handleAttributePin} className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
                   Pin
                 </li>
                 <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">

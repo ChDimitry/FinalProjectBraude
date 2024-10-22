@@ -139,6 +139,12 @@ io.on("connection", (socket) => {
     io.emit("selectedDeviceData", data);
   });
 
+  // Listen for 'pinAttribute' from the client
+  socket.on("pinAttribute", (data) => {
+    console.log("Pinned Attribute Data received:", data);
+    io.emit("pinnedAttribute", data);
+  });
+
   // Listen for 'filterData' event from the client
   socket.on(
     "graphFilterData",

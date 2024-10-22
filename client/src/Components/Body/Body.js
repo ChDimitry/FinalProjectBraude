@@ -6,7 +6,8 @@ import { AppDarkMode } from "../../App";
 
 import ServerSpeedWidget from "../Widgets/ServerSpeedWidget.js";
 import ActiveDevicesWidget from "../Widgets/ActiveDevicesWidget.js";
-import DeviceCompareScreen from "./DeviceCompareScreen.js";
+import PinnedAttributeWidget from "../Widgets/PinnedAttributeWidget.js";
+import DeviceCompareScreen from "./DeviceCompare.js";
 
 // Initialize the WebSocket connection (replace with your server URL)
 const socket = io("http://localhost:5000");
@@ -83,9 +84,9 @@ const Body = () => {
       <div className="flex flex-col md:flex-row gap-4 p-4">
         <ActiveDevicesWidget devices={devices} />
         <ServerSpeedWidget transferSpeeds={transferSpeeds} />
-        {/* <div className="bg-gradient-to-r from-sky-100 to-blue-200 p-4 w-full md:w-[10%] flex items-center shadow rounded h-[70px]"></div>
+        <PinnedAttributeWidget socket={socket} devices={devices} />
         <div className="bg-gradient-to-r from-indigo-100 to-cyan-100 p-4 w-full md:w-[20%] flex items-center shadow rounded h-[70px]"></div>
-        <div className="bg-gradient-to-r from-blue-100 to-sky-200 p-4 w-full md:w-[30%] flex items-center shadow rounded h-[70px]"></div> */}
+        <div className="bg-gradient-to-r from-blue-100 to-sky-200 p-4 w-full md:w-[30%] flex items-center shadow rounded h-[70px]"></div>
       </div>
 
       <div className="flex flex-col md:flex-row h-[900px] gap-4 p-4">

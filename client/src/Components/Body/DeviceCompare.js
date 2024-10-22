@@ -2,10 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { AppDarkMode } from "../../App";
 import DynamicLineChart from "../Graphs/DynamicLineChart";
 
-const DeviceCompareScreen = ({
-  socket,
-  onToggleExpand,
-}) => {
+const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
   const darkMode = useContext(AppDarkMode);
 
   // State for filtering options
@@ -14,12 +11,11 @@ const DeviceCompareScreen = ({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [lastXValues, setLastXValues] = useState("");
-  
+
   const [deviceID, setDeviceID] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [attributeKey, setAttributeKey] = useState("");
   const [attributeValue, setAttributeValue] = useState("");
-
 
   // State to store the graphs
   const [graphs, setGraphs] = useState([]);
@@ -46,8 +42,6 @@ const DeviceCompareScreen = ({
     });
   };
 
-
-
   // Listen for the filtered data from the server
   useEffect(() => {
     socket.on("graphFilteredData", (data) => {
@@ -62,7 +56,7 @@ const DeviceCompareScreen = ({
 
     socket.on("selectedDeviceData", (data) => {
       // Handle received data here
-      // console.log("Selected Device Data:", data); 
+      // console.log("Selected Device Data:", data);
       setDeviceID(data.deviceID);
       setDeviceType(data.deviceType);
       setAttributeKey(data.attributeKey);
@@ -92,14 +86,18 @@ const DeviceCompareScreen = ({
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between mb-3 items-top">
-          <h1
-            className={`text-lg font-bold p-2 ${
-              darkMode ? "text-[#ffffff]" : "text-[#304463]"
-            }`}
-          >
-            ATTRIBUTE GRAPHS | {attributeKey} {deviceID}
-          </h1>
+        <div className="flex justify-between items-top">
+          <div className="flex items-center rounded bg-white p-4 shadow-md">
+            <h1
+              className={`text-lg font-bold ${
+                darkMode ? "text-[#ffffff]" : "text-[#304463]"
+              }`}
+            >
+              {deviceID}
+            </h1>
+             | {attributeKey}
+          </div>
+
           <div className="grid grid-flow-col auto-cols-max gap-3">
             <button className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
               <svg
@@ -134,7 +132,7 @@ const DeviceCompareScreen = ({
             darkMode ? "bg-[#50698f]" : "bg-white"
           } shadow-md`}
         >
-          <div className="grid grid-rows-2 grid-flow-col gap-4">
+          <div className="grid grid-rows-2 grid-flow-col gap-3">
             <div>
               <label>Start Date</label>
               <input
