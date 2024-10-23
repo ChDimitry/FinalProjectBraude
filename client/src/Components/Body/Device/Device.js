@@ -31,7 +31,7 @@ const Device = ({ socket, onExpandCompare, device }) => {
           <DeviceAttribute
             key={"type"}
             socket={socket} // Pass the socket to the attribute
-            attributeKey={"DEVICE"}
+            attributeKey={"Device"}
             attributeValue={device.type}
             isMenuOpen={openMenuKey === "type"}
             onToggleMenu={() => handleMenuToggle("type")}

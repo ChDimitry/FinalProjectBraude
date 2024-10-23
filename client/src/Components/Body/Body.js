@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import Device from "./Device/Device.js";
 import DeviceNode from "./Device/DeviceNode.js";
 import { AppDarkMode } from "../../App";
+import { parseAttributeKey } from "../../Utils/StringParser";
 
 import ServerSpeedWidget from "../Widgets/ServerSpeedWidget.js";
 import ActiveDevicesWidget from "../Widgets/ActiveDevicesWidget.js";
@@ -104,7 +105,10 @@ const Body = () => {
               >
                 DEVICES
               </h1>
-              <button onClick={onToggleExpandCompare} className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+              <button
+                onClick={onToggleExpandCompare}
+                className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              >
                 <svg
                   width="24"
                   height="24"
@@ -148,7 +152,7 @@ const Body = () => {
                     >
                       <td className="p-2 font-light">{index}</td>
                       <td className="p-1 font-light">{parsedId}</td>
-                      <td className="p-2">{device.type}</td>
+                      <td className="p-2">{parseAttributeKey(device.type)}</td>
                       <td className="p-2 text-right">
                         <input
                           type="checkbox"
@@ -252,7 +256,9 @@ const Body = () => {
                 device={selectedDevice}
               />
             ) : (
-              <p>Select a device to see its details.</p>
+              <div className="flex flex-wrap">
+                <p className="">Select a device to view its attributes</p>
+              </div>
             )}
           </div>
         </div>

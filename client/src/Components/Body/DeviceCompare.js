@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppDarkMode } from "../../App";
 import DynamicLineChart from "../Graphs/DynamicLineChart";
+import { parseAttributeKey } from "../../Utils/StringParser";
 
 const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
   const darkMode = useContext(AppDarkMode);
@@ -88,14 +89,8 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
       <div className="flex flex-col gap-3">
         <div className="flex justify-between items-top">
           <div className="flex items-center rounded bg-white p-4 shadow-md">
-            <h1
-              className={`text-lg font-bold ${
-                darkMode ? "text-[#ffffff]" : "text-[#304463]"
-              }`}
-            >
-              {deviceID}
-            </h1>
-             | {attributeKey}
+            <span className="font-light mr-3">{deviceID}</span>
+            <span className="color-[#304463] whitespace-nowrap font-bold">{parseAttributeKey(attributeKey)}</span>
           </div>
 
           <div className="grid grid-flow-col auto-cols-max gap-3">
@@ -174,7 +169,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
               <input
                 type="number"
                 className="border p-1 ml-3 rounded w-[100px] focus:outline-none"
-                placeholder="Enter X"
+                placeholder="1000"
                 value={lastXValues}
                 onChange={(e) => setLastXValues(e.target.value)}
               />

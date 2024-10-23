@@ -7,7 +7,7 @@ const ActiveDevicesWidget = ({ devices }) => {
       <p className="p-3 whitespace-nowrap font-mono rounded-full w-7 h-7 font-bold bg-[#304463] text-cyan-200 flex items-center justify-center mr-2">
         <CountUp end={devices.length} duration={3} />
       </p>
-      <p className="color-[#304463] font-bold">ACTIVE DEVICES</p>
+      <p className="opacity-75 color-[#304463] font-bold">ACTIVE DEVICES</p>
     </div>
   );
 };

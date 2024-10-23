@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import io from "socket.io-client";
-import ExpandedAttribute from "./ExpandedAttribute";
 import { AppDarkMode } from "../../../App";
-import DynamicLineChart from "../../Graphs/DynamicLineChart";
+import { parseAttributeKey } from "../../../Utils/StringParser";
 
 const DeviceAttribute = ({
   socket, // Use the passed socket
@@ -92,7 +90,7 @@ const DeviceAttribute = ({
         <div className="flex justify-between">
           {/* Attribute Key */}
           <span className="font-semibold break-words overflow-hidden text-ellipsis">
-            {attributeKey}
+            {parseAttributeKey(attributeKey)}
           </span>
           <div
             className={`z-10 opacity-0 flex group-hover:opacity-100 transition-opacity duration-100`}
