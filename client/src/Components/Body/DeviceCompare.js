@@ -47,6 +47,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
   useEffect(() => {
     socket.on("graphFilteredData", (data) => {
       const newGraphData = data;
+      console.log("Filtered Data:", data);
 
       // Stop the loading spinner
       setLoading(false);
@@ -207,7 +208,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="size-5"
+                  className="absolute size-5 top-0 right-1"
                 >
                   <path
                     strokeLinecap="round"
@@ -217,7 +218,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
                 </svg>
               </button>
             </div>
-            <DynamicLineChart values={values} />
+            <DynamicLineChart time={new Date().toLocaleTimeString()} lastX={values.lastX} attributeKey={values.attributeKey} deviceID={values.deviceID} created={values.created} values={values.values} />
           </div>
         ))}
       </div>

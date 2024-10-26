@@ -130,10 +130,10 @@ const Body = () => {
             <table className="table-fixed">
               <thead className="">
                 <tr>
-                  <th className="text-left p-2 ">#</th>
+                  <th className="text-left p-2">#</th>
                   <th className="text-left p-1">ID</th>
                   <th className="text-left p-2">Type</th>
-                  <th className="text-right p-2">Show</th>
+                  <th className="text-right p-1">Show</th>
                 </tr>
               </thead>
               <tbody>
@@ -143,17 +143,17 @@ const Body = () => {
                   return (
                     <tr
                       key={device.id}
-                      className="cursor-pointer border-t border-dashed h-[40px] border-gray-200 rounded-lg"
+                      className="cursor-pointer border-t border-dashed h-[50px] border-gray-200 rounded-lg"
                       style={{
                         backgroundColor: isSelected ? "rgba(0,0,0,0.03)" : "",
                         borderLeft: isSelected ? "2px solid #304463" : "",
                       }}
                       onClick={() => handleDeviceClick(device)}
                     >
-                      <td className="p-2 font-light">{index}</td>
+                      <td className="p-2 font-light">{index + 1}</td>
                       <td className="p-1 font-light">{parsedId}</td>
                       <td className="p-2">{parseAttributeKey(device.type)}</td>
-                      <td className="p-2 text-right">
+                      <td className="p-1 text-right">
                         <input
                           type="checkbox"
                           className="form-checkbox h-4 w-4 accent-[#304463]"
@@ -205,6 +205,7 @@ const Body = () => {
                   7: [35, 80],
                   8: [35, 70],
                   9: [60, 60],
+                  10: [65, 60],
                 };
 
                 const position = positions[index] || [0, 0]; // Default position if undefined

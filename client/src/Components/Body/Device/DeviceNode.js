@@ -18,7 +18,7 @@ const DeviceNode = ({ device, index, onClick, style }) => {
         ...style,
       }}
     >
-      {index}
+      {index + 1}
     </div>
   );
 };

@@ -8,6 +8,18 @@ const corsAnywhere = require("cors-anywhere");
 const app = express();
 const server = http.createServer(app);
 
+
+function formatDate(date) {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+
 // Configure socket.io with CORS
 const io = socketIo(server, {
   cors: {
@@ -54,6 +66,13 @@ app.use("/cors-anywhere", (req, res) => {
 
 let cachedData = null;
 let totalDataSent = 0; // Track total data sent for speed calculation
+
+
+// import requests
+// url = 'http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:AirQualitySensor:GMW87:001?fromDate=2023-10-01T00:00:00.000Z&toDate=2025-12-31T23:59:59.999Z'
+// headers = {'fiware-service': 'openiot', 'fiware-servicepath': '/'}
+// r = requests.get(url, headers=headers)
+// print(r.json())
 
 // Function to fetch filtered graph data from the API based on filter parameters
 const fetchFilteredGraphData = async (
@@ -173,20 +192,26 @@ io.on("connection", (socket) => {
           new Date(endDateTime)
         );
 
-        const formattedKey = attributeKey
-
         const times = fetchedData.index;
         const attributes = fetchedData.attributes;
         const requestedAttribute = attributes.find(
-          (attr) => attr.attrName == formattedKey
+          (attr) => attr.attrName == attributeKey
         );
         const attributeData = requestedAttribute.values.slice(-lastX);
         const attributeTimes = times.slice(-lastX);
         // Create a list of { value, timestamp } objects
-        const requestedData = attributeData.map((value, index) => ({
+        const mappedValues = attributeData.map((value, index) => ({
           value,
           timestamp: attributeTimes[index],
         }));
+        const requestedData = {
+          values: mappedValues,
+          created: formatDate(new Date()),
+          deviceID: deviceID,
+          attributeKey: requestedAttribute.attrName,
+          lastX: lastX,
+        };
+        
         // Emit the fetched data back to the client
         socket.emit("graphFilteredData", requestedData);
       } catch (error) {
