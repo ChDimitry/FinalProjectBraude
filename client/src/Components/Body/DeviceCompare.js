@@ -23,6 +23,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
 
   // Loading state to handle spinner visibility
   const [loading, setLoading] = useState(false);
+  const [selectedColor, setSelectedColor] = useState("#304463"); // Default color for graph
 
   const submitGraphFilter = async () => {
     const startDateTime = new Date(`${startDate}T${startTime}`);
@@ -216,6 +217,26 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
           >
             {/* Icons that appear only on hover */}
             <div className="flex flex-row-reverse opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <button
+                className="relative z-10"
+                onClick={() => removeGraph(index)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+
               {/* Move up button */}
               <button
                 className="relative z-10"
@@ -256,26 +277,6 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     d="M12 6v12m0 0l-4-4m4 4l4-4"
-                  />
-                </svg>
-              </button>
-
-              <button
-                className="relative z-10"
-                onClick={() => removeGraph(index)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="absolute size-5 top-0 right-1"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
                   />
                 </svg>
               </button>
