@@ -85,6 +85,24 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
     );
   };
 
+  // Function to move the graph up in the list view
+  const moveGraphUp = (index) => {
+    if (index === 0) return; // Can't move the first graph up
+    const newGraphs = [...graphs];
+    const [movedGraph] = newGraphs.splice(index, 1);
+    newGraphs.splice(index - 1, 0, movedGraph);
+    setGraphs(newGraphs);
+  };
+
+  // Function to move the graph down in the list view
+  const moveGraphDown = (index) => {
+    if (index === graphs.length - 1) return; // Can't move the last graph down
+    const newGraphs = [...graphs];
+    const [movedGraph] = newGraphs.splice(index, 1);
+    newGraphs.splice(index + 1, 0, movedGraph);
+    setGraphs(newGraphs);
+  };
+
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -198,6 +216,50 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
           >
             {/* Icons that appear only on hover */}
             <div className="flex flex-row-reverse opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              {/* Move up button */}
+              <button
+                className="relative z-10"
+                onClick={() => moveGraphUp(index)}
+                disabled={index === 0}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 18V6m0 0l-4 4m4-4l4 4"
+                  />
+                </svg>
+              </button>
+
+              {/* Move down button */}
+              <button
+                className="relative z-10"
+                onClick={() => moveGraphDown(index)}
+                disabled={index === graphs.length - 1}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 6v12m0 0l-4-4m4 4l4-4"
+                  />
+                </svg>
+              </button>
+
               <button
                 className="relative z-10"
                 onClick={() => removeGraph(index)}
