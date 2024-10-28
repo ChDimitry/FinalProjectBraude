@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { AppDarkMode } from "../../App";
 import DynamicLineChart from "../Graphs/DynamicLineChart";
 import { parseAttributeKey } from "../../Utils/StringParser";
+import { ColorPicker } from "antd";
 
 const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
   const darkMode = useContext(AppDarkMode);
@@ -12,6 +13,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [lastXValues, setLastXValues] = useState("");
+  const [selectedGraphColor, setSelectedGraphColor] = useState("#304463");
 
   const [deviceID, setDeviceID] = useState("");
   const [deviceType, setDeviceType] = useState("");
@@ -23,7 +25,6 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
 
   // Loading state to handle spinner visibility
   const [loading, setLoading] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("#304463"); // Default color for graph
 
   const submitGraphFilter = async () => {
     const startDateTime = new Date(`${startDate}T${startTime}`);
@@ -41,25 +42,26 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
       startDateTime,
       endDateTime,
       lastX,
+      color: selectedGraphColor,
     });
   };
-
   // Listen for the filtered data from the server
   useEffect(() => {
     socket.on("graphFilteredData", (data) => {
+      // Create a new graph object with all necessary properties
       const newGraphData = data;
-      console.log("Filtered Data:", data);
+      console.log("Received filtered graph data:", newGraphData);
 
       // Stop the loading spinner
       setLoading(false);
 
-      // Append the new graph data
+      // Append the new graph data to the graphs array
       setGraphs((prevGraphs) => [newGraphData, ...prevGraphs]);
     });
 
     socket.on("selectedDeviceData", (data) => {
       // Handle received data here
-      // console.log("Selected Device Data:", data);
+      console.log("Selected Device Data:", data);
       setDeviceID(data.deviceID);
       setDeviceType(data.deviceType);
       setAttributeKey(data.attributeKey);
@@ -77,7 +79,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
       socket.off("error");
       socket.off("selectedDeviceData");
     };
-  }, [socket]);
+  }, [socket, selectedGraphColor]);
 
   // Function to remove a specific graph from the list
   const removeGraph = (indexToRemove) => {
@@ -110,7 +112,9 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
         <div className="flex justify-between items-top">
           <div className="flex items-center rounded bg-white p-4 shadow-md">
             <span className="font-light mr-3">{deviceID}</span>
-            <span className="color-[#304463] whitespace-nowrap font-bold">{parseAttributeKey(attributeKey)}</span>
+            <span className="color-[#304463] whitespace-nowrap font-bold">
+              {parseAttributeKey(attributeKey)}
+            </span>
           </div>
 
           <div className="grid grid-flow-col auto-cols-max gap-3">
@@ -194,6 +198,14 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
                 onChange={(e) => setLastXValues(e.target.value)}
               />
             </div>
+            <div>
+              <ColorPicker
+                defaultValue={selectedGraphColor}
+                onChangeComplete={(color) => setSelectedGraphColor(color.toHexString())}
+                showText
+                disabledAlpha
+              />
+            </div>
             <button
               onClick={submitGraphFilter}
               className="w-fit h-fit text-gray-900 border border-gray-200 hover:bg-white hover:border-gray-300 rounded text-sm px-4 py-2"
@@ -208,82 +220,92 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
           </div>
         )}
         {/* Graph Display */}
-        {graphs.map((values, index) => (
-          <div
-            key={index}
-            className={`group h-fit rounded p-4 ${
-              darkMode ? "bg-[#50698f]" : "bg-white"
-            } shadow-md`}
-          >
-            {/* Icons that appear only on hover */}
-            <div className="flex flex-row-reverse opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <button
-                className="relative z-10"
-                onClick={() => removeGraph(index)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-5"
+        {graphs.map((graphData, index) => {
+          return (
+            <div
+              key={index}
+              className={`group h-fit rounded p-4 ${
+                darkMode ? "bg-[#50698f]" : "bg-white"
+              } shadow-md`}
+            >
+              <div className="flex flex-row-reverse opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                {/* Remove graph button */}
+                <button
+                  className="relative z-10"
+                  onClick={() => removeGraph(index)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="size-5 absolute right-[0px] top-[2px]"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18 18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
 
-              {/* Move up button */}
-              <button
-                className="relative z-10"
-                onClick={() => moveGraphUp(index)}
-                disabled={index === 0}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-5"
+                {/* Move up button */}
+                <button
+                  className={`relative z-10 ${index === 0 ? 'opacity-40' : ''}`}
+                  onClick={() => moveGraphUp(index)}
+                  disabled={index === 0}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 18V6m0 0l-4 4m4-4l4 4"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1"
+                    stroke="currentColor"
+                    className="size-6 absolute right-[40px]"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 18V6m0 0l-4 4m4-4l4 4"
+                    />
+                  </svg>
+                </button>
 
-              {/* Move down button */}
-              <button
-                className="relative z-10"
-                onClick={() => moveGraphDown(index)}
-                disabled={index === graphs.length - 1}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-5"
+                {/* Move down button */}
+                <button
+                  className={`relative z-10 ${index === (graphs.length - 1) ? 'opacity-40' : ''}`}
+                  onClick={() => moveGraphDown(index)}
+                  disabled={index === (graphs.length - 1)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v12m0 0l-4-4m4 4l4-4"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1"
+                    stroke="currentColor"
+                    className="size-6 absolute right-[20px]"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6v12m0 0l-4-4m4 4l4-4"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <DynamicLineChart
+                graphID={index}
+                lastX={graphData.lastX}
+                attributeKey={graphData.attributeKey}
+                deviceID={graphData.deviceID}
+                created={graphData.created}
+                values={graphData.values}
+                color={graphData.color}
+              />
             </div>
-            <DynamicLineChart time={new Date().toLocaleTimeString()} lastX={values.lastX} attributeKey={values.attributeKey} deviceID={values.deviceID} created={values.created} values={values.values} />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );

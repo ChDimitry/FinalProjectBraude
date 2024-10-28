@@ -1,5 +1,12 @@
 import React from "react";
-import { ResponsiveContainer, AreaChart, YAxis, XAxis, Area, Tooltip } from "recharts";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  YAxis,
+  XAxis,
+  Area,
+  Tooltip,
+} from "recharts";
 import { parseAttributeKey } from "../../Utils/StringParser";
 
 // Custom tooltip component with formatted timestamp
@@ -13,7 +20,7 @@ const CustomTooltip = ({ active, payload }) => {
     const formattedTime = date.toLocaleTimeString("en-GB", { hour12: false }); // "h:m:s"
 
     return (
-      <div className="bg-white border p-2 rounded shadow-md opacity-90">
+      <div className="bg-white border ml-10 mr-10 p-2 rounded shadow-md opacity-90">
         <p>{`${formattedDate} ${formattedTime}`}</p>
         <p>{`${value}`}</p>
       </div>
@@ -24,11 +31,13 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 const DynamicLineChart = ({
+  graphID,
   lastX,
   attributeKey,
   deviceID,
   created,
   values,
+  color,
 }) => {
   if (values.length === 0) {
     return null; // Return null if there is no data
@@ -44,32 +53,38 @@ const DynamicLineChart = ({
 
   const dataToDisplay = values.slice(-lastX);
 
+  const gradientId = `colorValue-${deviceID}-${graphID}`;
+  const areaFillId = `areaFill-${deviceID}-${graphID}`;
+
   return (
     <div>
       <span className="font-light mr-2">{deviceID}</span>
-      <span className="color-[#304463] whitespace-nowrap font-semibold">
-        {parseAttributeKey(attributeKey)}
+      <span className="color-[#304463] mr-2 whitespace-nowrap font-semibold">
+        {parseAttributeKey(attributeKey)} <br/ >
+      </span>
+      <span className="text-xs text-gray-500 mr-2 whitespace-nowrap">
+        Minium: {minValue}, Maximum: {maxValue}, {lastX} Values {}
       </span>
       <ResponsiveContainer width="100%" height={100} className="mt-3">
         <AreaChart data={dataToDisplay}>
           <defs>
-            <linearGradient id="colorValue" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="1%" stopColor="#304463" stopOpacity={0} />
-              <stop offset="30%" stopColor="#304463" stopOpacity={1} />
-              <stop offset="70%" stopColor="#304463" stopOpacity={1} />
-              <stop offset="99%" stopColor="#304463" stopOpacity={0} />
+            <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="0">
+              <stop offset="1%" stopColor={color} stopOpacity={0} />
+              <stop offset="30%" stopColor={color} stopOpacity={1} />
+              <stop offset="70%" stopColor={color} stopOpacity={1} />
+              <stop offset="99%" stopColor={color} stopOpacity={0} />
             </linearGradient>
-            <linearGradient id="areaFill_0" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#304463" stopOpacity={1} />
-              <stop offset="100%" stopColor="#304463" stopOpacity={0.2} />
+            <linearGradient id={areaFillId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={color} stopOpacity={1} />
+              <stop offset="100%" stopColor={color} stopOpacity={0.2} />
             </linearGradient>
           </defs>
           <XAxis
             dataKey="timestamp"
-            tickLine={false}  // Hides the default tick line
-            axisLine={false}  // Hides the axis line
+            tickLine={false} // Hides the default tick line
+            axisLine={false} // Hides the axis line
             tickSize={2} // Set the size of the tick lines
-            tick={{ stroke: "#e3e9ee", strokeWidth: 0.5, dy: 0}} // Customize tick as a small vertical line
+            tick={{ stroke: "#e3e9ee", strokeWidth: 0.5, dy: 0 }} // Customize tick as a small vertical line
             tickFormatter={() => "|"} // Custom tick label to show just a vertical bar
             interval="preserveStartEnd"
           />
@@ -79,15 +94,14 @@ const DynamicLineChart = ({
           <Area
             type="monotone"
             dataKey="value"
-            stroke="url(#colorValue)" // Apply gradient to the stroke
+            stroke={`url(#${gradientId})`} // Use the unique gradient ID here
+            fill={`url(#${areaFillId})`} // Use the unique gradient ID here
             strokeWidth={2}
-            fillOpacity={1}
-            fill="url(#areaFill_0)" // Gradient fill for the area
           />
         </AreaChart>
       </ResponsiveContainer>
       <p className="text-xs text-gray-500 mt-3">
-        {created} {lastX} Values
+        {created} 
       </p>
     </div>
   );

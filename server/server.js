@@ -149,12 +149,7 @@ io.on("connection", (socket) => {
 
   // Listen for 'selectedDeviceData' from the client
   socket.on("selectedDeviceData", (data) => {
-    // console.log("Selected Device Data received:", data);
-
-    // Broadcast the data to all other clients (excluding the sender)
-    // socket.broadcast.emit("selectedDeviceData", data);
-    
-    // If you want to send it to all clients, including the sender, use:
+    console.log("Selected Device Data received:", data);
     io.emit("selectedDeviceData", data);
   });
 
@@ -174,13 +169,16 @@ io.on("connection", (socket) => {
       startDateTime,
       endDateTime,
       lastX,
+      color,
     }) => {
       console.log("Received filter data from client:", {
         deviceID,
         deviceType,
+        attributeKey,
         startDateTime,
         endDateTime,
         lastX,
+        color,
       });
 
       try {
@@ -197,6 +195,7 @@ io.on("connection", (socket) => {
         const requestedAttribute = attributes.find(
           (attr) => attr.attrName == attributeKey
         );
+
         const attributeData = requestedAttribute.values.slice(-lastX);
         const attributeTimes = times.slice(-lastX);
         // Create a list of { value, timestamp } objects
@@ -204,12 +203,14 @@ io.on("connection", (socket) => {
           value,
           timestamp: attributeTimes[index],
         }));
+
         const requestedData = {
           values: mappedValues,
           created: formatDate(new Date()),
           deviceID: deviceID,
           attributeKey: requestedAttribute.attrName,
           lastX: lastX,
+          color: color,
         };
         
         // Emit the fetched data back to the client

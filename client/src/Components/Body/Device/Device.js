@@ -37,23 +37,25 @@ const Device = ({ socket, onExpandCompare, device }) => {
             onToggleMenu={() => handleMenuToggle("type")}
             onCloseMenu={() => setOpenMenuKey(null)}
           />
-          {Object.keys(device).map((key) => {
-            return (
-              <DeviceAttribute
-                key={key}
-                socket={socket} // Pass the socket to each attribute
-                deviceID={device.id.split(":").slice(-2).join(":")}
-                deviceType={device.type}
-                attributeKey={key}
-                attributeValue={JSON.parse(JSON.stringify(device[key])).value}
-                isMenuOpen={openMenuKey === key}
-                onToggleMenu={() => handleMenuToggle(key)}
-                onCloseMenu={() => setOpenMenuKey(null)}
-                onExpandCompare={onExpandCompare}
-                darkMode={darkMode}
-              />
-            );
-          })}
+          {Object.keys(device)
+            .sort() // Sort the keys to ensure consistent order
+            .map((key) => {
+              return (
+                <DeviceAttribute
+                  key={key}
+                  socket={socket} // Pass the socket to each attribute
+                  deviceID={device.id.split(":").slice(-2).join(":")}
+                  deviceType={device.type}
+                  attributeKey={key}
+                  attributeValue={JSON.parse(JSON.stringify(device[key])).value}
+                  isMenuOpen={openMenuKey === key}
+                  onToggleMenu={() => handleMenuToggle(key)}
+                  onCloseMenu={() => setOpenMenuKey(null)}
+                  onExpandCompare={onExpandCompare}
+                  darkMode={darkMode}
+                />
+              );
+            })}
         </div>
       </div>
       <hr className="w-[400px] h-1 mx-auto my-4 bg-gray-200 border-0 rounded md:my-5 dark:bg-gray-700"></hr>

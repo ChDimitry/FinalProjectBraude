@@ -158,6 +158,7 @@ const Body = () => {
                           type="checkbox"
                           className="form-checkbox h-4 w-4 accent-[#304463]"
                           defaultChecked={true}
+
                         />
                       </td>
                     </tr>
