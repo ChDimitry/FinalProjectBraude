@@ -7,7 +7,6 @@ import { AppDarkMode } from '../../App';
 const Header = ({ toggleDarkMode }) => {
 
   const darkMode = useContext(AppDarkMode)
-  console.log("here" + darkMode)
   return (
     <header className="flex justify-between items-center h-20">
       <div className="relative flex justify-start items-center h-full p-2">

@@ -18,6 +18,10 @@ const DeviceAttribute = ({
   const [attributeValues, setAttributeValues] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
 
+  const [copySuccess, setCopySuccess] = useState("");
+  const [highlightedAttribute, setHighlightedAttribute] = useState(null);
+
+
   useEffect(() => {
     // Ensure attributeValue exists before updating
     if (attributeValue === undefined) return;
@@ -36,6 +40,25 @@ const DeviceAttribute = ({
       return updatedValues;
     });
   }, [attributeValue]);
+
+  // Handler for copy attribute's data
+  const handleCopyAttribute = () => {
+    const copyText = `${deviceID} \n ${deviceType} \n ${attributeKey} \n ${attributeValue}`
+
+    navigator.clipboard.writeText(copyText)
+    .then(() => {
+      setCopySuccess("Copied to clipboard!"); 
+      setHighlightedAttribute(attributeKey); 
+      setTimeout(() => {
+        setCopySuccess(""); 
+        setHighlightedAttribute(null); 
+      }, 2000);
+    })
+    .catch(err => {
+      setCopySuccess("Failed to copy!");
+    });
+    onCloseMenu();
+  }
 
   const handleCompare = () => {
     const data = {
@@ -84,7 +107,7 @@ const DeviceAttribute = ({
       <div
         className={`p-4 shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group
           ${darkMode ? "bg-[#50698f]" : "bg-white"} 
-           
+          ${highlightedAttribute === attributeKey ? "bg-green-100 border border-green-500" : ""}
           `}
       >
         <div className="flex justify-between">
@@ -141,8 +164,8 @@ const DeviceAttribute = ({
                 <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
                   Hide
                 </li>
-                <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
-                  More...
+                <li onClick={handleCopyAttribute} className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
+                  Copy
                 </li>
               </ul>
             </div>
@@ -155,6 +178,13 @@ const DeviceAttribute = ({
           </span>
         )}
       </div>
+
+      {copySuccess && (
+        <div className="fixed bottom-5 right-5 bg-green-500 text-white p-2 rounded shadow-md">
+          {copySuccess}
+        </div>
+      )}
+
       {/* {expanded && (
         <div
           className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${
