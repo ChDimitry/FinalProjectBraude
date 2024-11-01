@@ -3,6 +3,7 @@ import { AppDarkMode } from "../../App";
 import DynamicLineChart from "../Graphs/DynamicLineChart";
 import { parseAttributeKey } from "../../Utils/StringParser";
 import { ColorPicker } from "antd";
+import * as XLSX from 'xlsx'
 
 const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
   const darkMode = useContext(AppDarkMode);
@@ -106,6 +107,30 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
     setGraphs(newGraphs);
   };
 
+  // Function fo export the graph's data to Excel file
+  const exportToExcel = () => {
+    const wb = XLSX.utils.book_new(); // Create a new workbook
+
+  graphs.forEach((graphData, index) => {
+    const { deviceID, attributeKey, values, created } = graphData;
+    const data = [['Timestamp', 'Value']]; // Define headers for each graph sheet
+
+    // Populate the data array with values
+    values.forEach(({ timestamp, value }) => {
+      data.push([new Date(timestamp).toLocaleString(), value]);
+    });
+
+    // Create a worksheet for the current graph
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    
+    // Append the worksheet to the workbook with a unique name
+    XLSX.utils.book_append_sheet(wb, ws, `Graph ${index + 1}`);
+  });
+
+  // Export the workbook
+  XLSX.writeFile(wb, 'GraphsData.xlsx');
+};
+
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -118,7 +143,9 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
           </div>
 
           <div className="grid grid-flow-col auto-cols-max gap-3">
-            <button className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+            <button 
+            onClick={exportToExcel}
+            className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
