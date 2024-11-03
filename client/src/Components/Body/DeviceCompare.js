@@ -112,7 +112,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
     const wb = XLSX.utils.book_new(); // Create a new workbook
 
   graphs.forEach((graphData, index) => {
-    const { deviceID, attributeKey, values, created } = graphData;
+    const { deviceID, attributeKey, values } = graphData;
     const data = [['Timestamp', 'Value']]; // Define headers for each graph sheet
 
     // Populate the data array with values
@@ -144,7 +144,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
 
   // Get the current date and time
   const now = new Date();
-  const formattedDate = now.toISOString().replace(/[:.]/g, '-').replace('T', ' ').slice(0, 19);; // Replace colons and dots for safe filename
+  const formattedDate = now.toISOString().replace(/[:.]/g, '-').replace('T', ' ').slice(0, 19);; // Replace colons and dots
 
   // Create the filename with the formatted date and time
   const filename = `${formattedDate}.xlsx`;
