@@ -120,15 +120,37 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
       data.push([new Date(timestamp).toLocaleString(), value]);
     });
 
+    // Create a new row for the header with device ID and attribute name
+    const headerRow = [
+      [`Device ID: ${deviceID}`, `Attribute: ${parseAttributeKey(attributeKey)}`]
+    ];
+
     // Create a worksheet for the current graph
     const ws = XLSX.utils.aoa_to_sheet(data);
+
+    XLSX.utils.sheet_add_aoa(ws, headerRow, { origin: 'C1' });
+
+    // Set the column widths for better visibility
+    ws['!cols'] = [
+      { wch: 20 }, // Width for Timestamp
+      { wch: 15 }, // Width for Value
+      { wch: 20 },  // Width for Device ID 
+      { wch: 20 },  // Width for Attribute 
+    ];
     
     // Append the worksheet to the workbook with a unique name
     XLSX.utils.book_append_sheet(wb, ws, `Graph ${index + 1}`);
   });
 
+  // Get the current date and time
+  const now = new Date();
+  const formattedDate = now.toISOString().replace(/[:.]/g, '-').replace('T', ' ').slice(0, 19);; // Replace colons and dots for safe filename
+
+  // Create the filename with the formatted date and time
+  const filename = `${formattedDate}.xlsx`;
+
   // Export the workbook
-  XLSX.writeFile(wb, 'GraphsData.xlsx');
+  XLSX.writeFile(wb, filename);
 };
 
   return (
