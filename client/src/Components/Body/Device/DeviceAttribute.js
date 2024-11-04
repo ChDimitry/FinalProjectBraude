@@ -7,6 +7,7 @@ const DeviceAttribute = ({
   deviceID,
   deviceType,
   attributeKey,
+  attributeType,
   attributeValue,
   isMenuOpen,
   onToggleMenu,
@@ -15,12 +16,10 @@ const DeviceAttribute = ({
 }) => {
   const menuRef = useRef(null);
   const darkMode = useContext(AppDarkMode);
-  const [attributeValues, setAttributeValues] = useState([]);
-  const [lastUpdated, setLastUpdated] = useState(Date.now());
 
+  const [lastUpdated, setLastUpdated] = useState(Date.now());
   const [copySuccess, setCopySuccess] = useState("");
   const [highlightedAttribute, setHighlightedAttribute] = useState(null);
-
 
   useEffect(() => {
     // Ensure attributeValue exists before updating
@@ -29,36 +28,27 @@ const DeviceAttribute = ({
     // Create a new entry for the current attribute value
     const newEntry = { value: attributeValue, timestamp: Date.now() };
     setLastUpdated(newEntry.timestamp);
-    setAttributeValues((prev) => {
-      const updatedValues = [...prev, newEntry];
-
-      // Limit the number of values to display
-      if (updatedValues.length > 25) {
-        updatedValues.shift();
-      }
-
-      return updatedValues;
-    });
   }, [attributeValue]);
 
   // Handler for copy attribute's data
   const handleCopyAttribute = () => {
-    const copyText = `${deviceID} \n ${deviceType} \n ${attributeKey} \n ${attributeValue}`
+    const copyText = `${deviceID} \n ${deviceType} \n ${attributeKey} \n ${attributeValue}`;
 
-    navigator.clipboard.writeText(copyText)
-    .then(() => {
-      setCopySuccess("Copied to clipboard!"); 
-      setHighlightedAttribute(attributeKey); 
-      setTimeout(() => {
-        setCopySuccess(""); 
-        setHighlightedAttribute(null); 
-      }, 2000);
-    })
-    .catch(err => {
-      setCopySuccess("Failed to copy!");
-    });
+    navigator.clipboard
+      .writeText(copyText)
+      .then(() => {
+        setCopySuccess("Copied to clipboard!");
+        setHighlightedAttribute(attributeKey);
+        setTimeout(() => {
+          setCopySuccess("");
+          setHighlightedAttribute(null);
+        }, 1000);
+      })
+      .catch((err) => {
+        setCopySuccess("Failed to copy!");
+      });
     onCloseMenu();
-  }
+  };
 
   const handleCompare = () => {
     const data = {
@@ -81,9 +71,8 @@ const DeviceAttribute = ({
     socket.emit("pinAttribute", data);
     onCloseMenu();
     // console.log("Emitting pinAttribute:", data);
-  }
+  };
 
-  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -105,9 +94,13 @@ const DeviceAttribute = ({
   return (
     <>
       <div
-        className={`p-4 shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group
+        className={`m-1 p-4 shadow-md hover:shadow-lg transition-shadow duration-100 flex flex-col relative group
           ${darkMode ? "bg-[#50698f]" : "bg-white"} 
-          ${highlightedAttribute === attributeKey ? "bg-green-100 border border-green-500" : ""}
+          ${
+            highlightedAttribute === attributeKey
+              ? "outline rounded outline-green-200"
+              : ""
+          }
           `}
       >
         <div className="flex justify-between">
@@ -151,20 +144,30 @@ const DeviceAttribute = ({
               </svg>
             </button>
           </div>
-
+          {/* {copySuccess && (
+            <div className="animate-pulse absolute z-10 left-0 top-0 bg-green-200 text-green-500 p-2 rounded shadow-md">
+              {copySuccess}
+            </div>
+          )} */}
           {isMenuOpen && (
             <div
               ref={menuRef}
               className="absolute right-6 top-9 bg-white border border-gray-200 rounded shadow-lg z-20 w-24"
             >
               <ul className="py-1">
-                <li onClick={handleAttributePin} className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
+                <li
+                  onClick={handleAttributePin}
+                  className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm"
+                >
                   Pin
                 </li>
                 <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
                   Hide
                 </li>
-                <li onClick={handleCopyAttribute} className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
+                <li
+                  onClick={handleCopyAttribute}
+                  className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm"
+                >
                   Copy
                 </li>
               </ul>
@@ -177,35 +180,8 @@ const DeviceAttribute = ({
             {new Date(lastUpdated).toLocaleTimeString()}
           </span>
         )}
+        <span className="text-xs text-gray-500 h-4">{attributeType}</span>
       </div>
-
-      {copySuccess && (
-        <div className="fixed bottom-5 right-5 bg-green-500 text-white p-2 rounded shadow-md">
-          {copySuccess}
-        </div>
-      )}
-
-      {/* {expanded && (
-        <div
-          className={`absolute top-[15%] mt-[2px] right-[25%] ml-4 ${
-            darkMode ? "bg-[#445672]" : "bg-gray-100"
-          } bg-opacity-90 h-[868px] w-[800px] p-4 rounded-tl rounded-bl overflow-auto`}
-          style={{
-            animation: animate
-              ? "slideOut 0.2s ease-out forwards"
-              : "slideIn 0.2s ease-out forwards",
-          }}
-        >
-          <ExpandedAttribute
-            onToggleExpand={onToggleExpand}
-            deviceID={deviceID}
-            deviceType={deviceType}
-            attributeKey={attributeKey}
-            attributeValue={attributeValue}
-            attributeValuesList={attributeValues}
-          />
-        </div>
-      )} */}
     </>
   );
 };

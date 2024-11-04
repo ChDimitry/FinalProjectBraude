@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CountUp from "react-countup";
-import { parseAttributeKey } from "../../Utils/StringParser";
+import { parseAttributeKey, parseAttributeID } from "../../Utils/StringParser";
 
 const PinnedAttributeWidget = ({ socket, devices }) => {
   const [pinnedAttribute, setPinnedAttribute] = useState([]);
@@ -15,7 +15,7 @@ const PinnedAttributeWidget = ({ socket, devices }) => {
 
     const device = devices.find(
       (device) =>
-        device.id.split(":").slice(-2).join(":") === pinnedAttribute.deviceID
+        parseAttributeID(device.id) === pinnedAttribute.deviceID
     );
     if (device) {
       const attribute = device[pinnedAttribute.attributeKey];

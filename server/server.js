@@ -79,11 +79,12 @@ const fetchFilteredGraphData = async (
   deviceID,
   deviceType,
   startDateTime,
-  endDateTime
+  endDateTime,
+  lastX
 ) => {
   try {
     // Construct the API URL dynamically based on the filter parameters
-    const API_URL = `http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:${deviceType}:${deviceID}?fromDate=${startDateTime.toISOString()}&toDate=${endDateTime.toISOString()}`;
+    const API_URL = `http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:${deviceType}:${deviceID}?lastN=${lastX}&fromDate=${startDateTime.toISOString()}&toDate=${endDateTime.toISOString()}`;
     console.log("Fetching data from API:", API_URL);
 
     const response = await axios.get(
@@ -123,7 +124,11 @@ const fetchDevices = async () => {
         },
       }
     );
-    cachedData = response.data;
+    // Filter devices based on the useCases attribute
+    const filteredData = response.data.filter(device => 
+      device.useCases && device.useCases.value === "Braude"
+    );
+    cachedData = filteredData;
     const dataSize = JSON.stringify(cachedData).length; // Calculate the size of the data
     totalDataSent += dataSize; // Increment total data sent
 
@@ -141,8 +146,8 @@ const calculateAndEmitSpeed = () => {
 };
 
 fetchDevices();
-setInterval(fetchDevices, 5000);
-setInterval(calculateAndEmitSpeed, 5000); // Calculate and emit speed every 5 seconds
+setInterval(fetchDevices, 1000);
+setInterval(calculateAndEmitSpeed, 1000); // Calculate and emit speed every 5 seconds
 
 io.on("connection", (socket) => {
   console.log("New client connected");
@@ -187,7 +192,8 @@ io.on("connection", (socket) => {
           deviceID,
           deviceType,
           new Date(startDateTime),
-          new Date(endDateTime)
+          new Date(endDateTime),
+          lastX,
         );
 
         const times = fetchedData.index;
@@ -196,8 +202,8 @@ io.on("connection", (socket) => {
           (attr) => attr.attrName == attributeKey
         );
 
-        const attributeData = requestedAttribute.values.slice(-lastX);
-        const attributeTimes = times.slice(-lastX);
+        const attributeData = requestedAttribute.values;
+        const attributeTimes = times;
         // Create a list of { value, timestamp } objects
         const mappedValues = attributeData.map((value, index) => ({
           value,

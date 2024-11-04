@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import DeviceAttribute from "./DeviceAttribute";
 import BarChart from "../../Graphs/BarChart";
 import { AppDarkMode } from "../../../App";
+import { parseAttributeID } from "../../../Utils/StringParser";
 
 const Device = ({ socket, onExpandCompare, device }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null); // Track the open menu
@@ -24,30 +25,32 @@ const Device = ({ socket, onExpandCompare, device }) => {
     .filter((item) => item !== null);
 
   return (
-    <div className="z-10 flex flex-col gap-3 h-full h-[800px]">
+    <div className="z-10 flex flex-col gap-2 h-full h-[800px]">
       {/* Attributes Section */}
       <div className="overflow-auto rounded md:h-[60%]">
-        <div className="grid grid-cols-2 gap-3 auto-rows-auto">
+        <div className="grid grid-cols-2 gap-1 auto-rows-auto">
           <DeviceAttribute
             key={"type"}
             socket={socket} // Pass the socket to the attribute
             attributeKey={"Device"}
-            attributeValue={device.type}
+            attributeValue={[parseAttributeID(device.id)," ", device.type]}
             isMenuOpen={openMenuKey === "type"}
             onToggleMenu={() => handleMenuToggle("type")}
             onCloseMenu={() => setOpenMenuKey(null)}
           />
           {Object.keys(device)
-            .sort() // Sort the keys to ensure consistent order
+            .sort()
             .map((key) => {
+              if (key === "type" || key === "id") return null; // Skip the type and id attribute
               return (
                 <DeviceAttribute
                   key={key}
                   socket={socket} // Pass the socket to each attribute
-                  deviceID={device.id.split(":").slice(-2).join(":")}
+                  deviceID={parseAttributeID(device.id)}
                   deviceType={device.type}
                   attributeKey={key}
-                  attributeValue={JSON.parse(JSON.stringify(device[key])).value}
+                  attributeType={JSON.parse(JSON.stringify(device[key])).type}
+                  attributeValue={JSON.parse(JSON.stringify(device[key])).object || JSON.parse(JSON.stringify(device[key])).value}
                   isMenuOpen={openMenuKey === key}
                   onToggleMenu={() => handleMenuToggle(key)}
                   onCloseMenu={() => setOpenMenuKey(null)}

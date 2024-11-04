@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import Device from "./Device/Device.js";
 import DeviceNode from "./Device/DeviceNode.js";
 import { AppDarkMode } from "../../App";
-import { parseAttributeKey } from "../../Utils/StringParser";
+import { parseAttributeKey, parseAttributeID } from "../../Utils/StringParser";
 
 import ServerSpeedWidget from "../Widgets/ServerSpeedWidget.js";
 import ActiveDevicesWidget from "../Widgets/ActiveDevicesWidget.js";
@@ -138,7 +138,6 @@ const Body = () => {
               </thead>
               <tbody>
                 {devices.map((device, index) => {
-                  const parsedId = device.id.split(":").slice(-2).join(":");
                   const isSelected = device === selectedDevice;
                   return (
                     <tr
@@ -151,7 +150,7 @@ const Body = () => {
                       onClick={() => handleDeviceClick(device)}
                     >
                       <td className="p-2 font-light">{index + 1}</td>
-                      <td className="p-1 font-light">{parsedId}</td>
+                      <td className="p-1 font-light">{parseAttributeID(device.id)}</td>
                       <td className="p-2">{parseAttributeKey(device.type)}</td>
                       <td className="p-1 text-right">
                         <input
@@ -199,7 +198,7 @@ const Body = () => {
                   0: [30, 75],
                   1: [40, 75],
                   2: [50, 10],
-                  3: [25, 80],
+                  3: [25, 80], // 4 
                   4: [28, 72],
                   5: [22, 70],
                   6: [25, 75],

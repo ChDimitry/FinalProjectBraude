@@ -13,3 +13,7 @@ export function parseAttributeKey(str) {
       .join(' ');
   }
   
+
+export function parseAttributeID(str) {
+  return str.split(":").slice(-2).join(":");
+}
