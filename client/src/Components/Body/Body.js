@@ -127,12 +127,12 @@ const Body = () => {
                 <span>Compare</span>
               </button>
             </div>
-            <table className="table-fixed">
+            <table className="table-fixed w-full">
               <thead className="">
                 <tr>
-                  <th className="text-left p-2">#</th>
-                  <th className="text-left p-1">ID</th>
-                  <th className="text-left p-2">Type</th>
+                  <th className="text-left w-[20px] p-1">#</th>
+                  <th className="text-left w-[150px] p-1">ID</th>
+                  <th className="text-left w-[150px] p-2">Type</th>
                   <th className="text-right p-1">Show</th>
                 </tr>
               </thead>
@@ -149,10 +149,10 @@ const Body = () => {
                       }}
                       onClick={() => handleDeviceClick(device)}
                     >
-                      <td className="p-2 font-light">{index + 1}</td>
+                      <td className="p-1 font-light">{index + 1}</td>
                       <td className="p-1 font-light">{parseAttributeID(device.id)}</td>
                       <td className="p-2">{parseAttributeKey(device.type)}</td>
-                      <td className="p-1 text-right">
+                      <td className="p-1 w-fit text-right">
                         <input
                           type="checkbox"
                           className="form-checkbox h-4 w-4 accent-[#304463]"

@@ -13,6 +13,7 @@ const DeviceAttribute = ({
   onToggleMenu,
   onCloseMenu,
   onExpandCompare,
+  isValidValue,
 }) => {
   const menuRef = useRef(null);
   const darkMode = useContext(AppDarkMode);
@@ -98,7 +99,7 @@ const DeviceAttribute = ({
           ${darkMode ? "bg-[#50698f]" : "bg-white"} 
           ${
             highlightedAttribute === attributeKey
-              ? "outline rounded outline-green-200"
+              ? "outline rounded outline-green-200 opacity-90"
               : ""
           }
           `}
@@ -111,22 +112,25 @@ const DeviceAttribute = ({
           <div
             className={`z-10 opacity-0 flex group-hover:opacity-100 transition-opacity duration-100`}
           >
-            <button onClick={handleCompare} className="relative z-10">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="h-4 w-4 text-gray-700"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 19.5-15-15m0 0v11.25m0-11.25h11.25"
-                />
-              </svg>
-            </button>
+            {isValidValue && (
+              <button onClick={handleCompare} className="relative z-10">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-4 w-4 text-gray-700"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m19.5 19.5-15-15m0 0v11.25m0-11.25h11.25"
+                  />
+                </svg>
+              </button>
+            )}
+
             <button onClick={onToggleMenu} className="relative z-10">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -155,12 +159,15 @@ const DeviceAttribute = ({
               className="absolute right-6 top-9 bg-white border border-gray-200 rounded shadow-lg z-20 w-24"
             >
               <ul className="py-1">
-                <li
-                  onClick={handleAttributePin}
-                  className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm"
-                >
-                  Pin
-                </li>
+                {isValidValue && (
+                  <li
+                    onClick={handleAttributePin}
+                    className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm"
+                  >
+                    Pin
+                  </li>
+                )}
+
                 <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-gray-600 text-sm">
                   Hide
                 </li>

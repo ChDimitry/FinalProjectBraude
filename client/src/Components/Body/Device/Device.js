@@ -3,6 +3,7 @@ import DeviceAttribute from "./DeviceAttribute";
 import BarChart from "../../Graphs/BarChart";
 import { AppDarkMode } from "../../../App";
 import { parseAttributeID } from "../../../Utils/StringParser";
+import { isInt, isFloat } from "../../../Utils/NumParser";
 
 const Device = ({ socket, onExpandCompare, device }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null); // Track the open menu
@@ -41,6 +42,8 @@ const Device = ({ socket, onExpandCompare, device }) => {
           {Object.keys(device)
             .sort()
             .map((key) => {
+              const value = JSON.parse(JSON.stringify(device[key])).value;
+              const isValidValue = isInt(value) || isFloat(value);
               if (key === "type" || key === "id") return null; // Skip the type and id attribute
               return (
                 <DeviceAttribute
@@ -56,6 +59,7 @@ const Device = ({ socket, onExpandCompare, device }) => {
                   onCloseMenu={() => setOpenMenuKey(null)}
                   onExpandCompare={onExpandCompare}
                   darkMode={darkMode}
+                  isValidValue={isValidValue}
                 />
               );
             })}
