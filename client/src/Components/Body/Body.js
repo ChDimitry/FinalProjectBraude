@@ -128,7 +128,7 @@ const Body = () => {
                 <span>Compare</span>
               </button>
             </div>
-            <table className="table-fixed w-full h-[500px]">
+            <table className="table-fixed w-full mb-4">
               <thead className="">
                 <tr>
                   <th className="text-left w-[20px] p-1">#</th>
