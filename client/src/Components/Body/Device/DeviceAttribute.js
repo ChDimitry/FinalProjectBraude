@@ -183,11 +183,11 @@ const DeviceAttribute = ({
         </div>
         <div className="break-words flex-grow">{attributeValue}</div>
         {attributeKey.includes("value") && (
-          <span className="text-xs text-gray-500 h-4">
+          <span className={`text-xs ${darkMode ? "text-black": "text-gray-500"} h-4`}>
             {new Date(lastUpdated).toLocaleTimeString()}
           </span>
         )}
-        <span className="text-xs text-gray-500 h-4">{attributeType}</span>
+        <span className={`text-xs ${darkMode ? "text-black": "text-gray-500"} h-4`}>{attributeType}</span>
       </div>
     </>
   );
