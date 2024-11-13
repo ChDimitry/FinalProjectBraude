@@ -167,7 +167,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
           <div className="grid grid-flow-col auto-cols-max gap-3">
             <button 
             onClick={exportToExcel}
-            className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+            className={`flex items-center gap-2 align-right h-fit ${darkMode ? "bg-[#50698f] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"} rounded text-sm px-4 py-2`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -187,8 +187,8 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
             </button>
             <button
               onClick={onToggleExpand}
-              className="h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-            >
+              className={`flex items-center gap-2 align-right h-fit ${darkMode ? "bg-[#50698f] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"} rounded text-sm px-4 py-2`}
+              >
               Close
             </button>
           </div>
