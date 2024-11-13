@@ -168,7 +168,9 @@ const Body = () => {
               </tbody>
             </table>
             <hr className="w-[400px] h-1 mx-auto my-4 bg-gray-200 border-0 rounded md:my-5 dark:bg-gray-700"></hr>
-            <Config />
+            <Config 
+            socket={socket}
+            />
           </div>
         </div>
 

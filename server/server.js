@@ -66,7 +66,7 @@ app.use("/cors-anywhere", (req, res) => {
 
 let cachedData = null;
 let totalDataSent = 0; // Track total data sent for speed calculation
-
+let currentUseCaseValue = "Braude"; // Store current useCaseValue
 
 // import requests
 // url = 'http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:AirQualitySensor:GMW87:001?fromDate=2023-10-01T00:00:00.000Z&toDate=2025-12-31T23:59:59.999Z'
@@ -125,9 +125,13 @@ const fetchDevices = async () => {
       }
     );
     // Filter devices based on the useCases attribute
-    const filteredData = response.data.filter(device => 
-      device.useCases && device.useCases.value === "Braude"
-    );
+    let filteredData = response.data;
+    if (currentUseCaseValue !== "All") {
+      // Filter devices based on the useCases attribute if it's not "All"
+      filteredData = response.data.filter(device =>
+        device.useCases && device.useCases.value === currentUseCaseValue
+      );
+    }
     cachedData = filteredData;
     const dataSize = JSON.stringify(cachedData).length; // Calculate the size of the data
     totalDataSent += dataSize; // Increment total data sent
@@ -162,6 +166,17 @@ io.on("connection", (socket) => {
   socket.on("pinAttribute", (data) => {
     console.log("Pinned Attribute Data received:", data);
     io.emit("pinnedAttribute", data);
+  });
+
+  // Listen for 'useCaseData' from the client to fetch data based on use case
+  socket.on("useCaseData", (data) => {
+    console.log("Received use case from client:", data.useCaseValue);
+
+    // Update the current use case value dynamically
+    currentUseCaseValue = data.useCaseValue;
+
+    // Fetch devices based on the new use case
+    fetchDevices();
   });
 
   // Listen for 'filterData' event from the client

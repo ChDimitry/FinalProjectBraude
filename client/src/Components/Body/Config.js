@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AppDarkMode } from "../../App";
-const Config = () => {
+const Config = ({ socket }) => {
   const darkMode = useContext(AppDarkMode);
 
   const [refreshTime, setRefreshTime] = useState("");
@@ -10,6 +10,15 @@ const Config = () => {
     "All",
     "Braude",
   ];
+
+  const getUseCase = (e) => {
+    const newUseCaseValue = e.target.value;
+    setUseCaseValue(newUseCaseValue);
+    socket.emit("useCaseData", {
+      useCaseValue: newUseCaseValue,
+    });
+
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -28,7 +37,7 @@ const Config = () => {
             <label>Use Case</label>
             <select
               value={useCaseValue}
-              onChange={(e) => setUseCaseValue(e.target.value)}
+              onChange={getUseCase}
               className="border p-1 ml-1 rounded w-[100px] focus:outline-none text-black"
             >
               <option value="" disabled>Select a use case</option>
