@@ -108,7 +108,7 @@ const Body = () => {
               </h1>
               <button
                 onClick={onToggleExpandCompare}
-                className="flex items-center gap-2 align-right h-fit text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                className={`flex items-center gap-2 align-right h-fit ${darkMode ? "bg-gray-500 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"} rounded text-sm px-4 py-2`}
               >
                 <svg
                   width="24"
@@ -247,7 +247,7 @@ const Body = () => {
               {selectedDevice && (
                 <button
                   onClick={() => setSelectedDevice(null)}
-                  className="text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100 rounded text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                  className={`rounded text-sm px-4 py-2 ${darkMode ? "bg-gray-500 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"}`}
                 >
                   Close
                 </button>
