@@ -157,7 +157,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
     <>
       <div className="flex flex-col gap-3">
         <div className="flex justify-between items-top">
-          <div className="flex items-center rounded bg-white p-4 shadow-md">
+          <div className={`flex items-center rounded ${darkMode ? "bg-[#50698f]" : "bg-white"} p-4 shadow-md`}>
             <span className="font-light mr-3">{deviceID}</span>
             <span className="color-[#304463] whitespace-nowrap font-bold">
               {parseAttributeKey(attributeKey)}
@@ -205,7 +205,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
               <label>Start Date</label>
               <input
                 type="date"
-                className="border p-1 ml-3 rounded focus:outline-none"
+                className="border p-1 ml-3 rounded focus:outline-none text-black"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
@@ -214,7 +214,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
               <label>End Date</label>
               <input
                 type="date"
-                className="border p-1 ml-3 rounded focus:outline-none"
+                className="border p-1 ml-3 rounded focus:outline-none text-black"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
@@ -223,7 +223,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
               <label>Start Time</label>
               <input
                 type="time"
-                className="border p-1 ml-3 rounded focus:outline-none"
+                className="border p-1 ml-3 rounded focus:outline-none text-black"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
               />
@@ -232,7 +232,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
               <label>End Time</label>
               <input
                 type="time"
-                className="border p-1 ml-3 rounded focus:outline-none"
+                className="border p-1 ml-3 rounded focus:outline-none text-black"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
               />
@@ -241,7 +241,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
               <label>Last X Values</label>
               <input
                 type="number"
-                className="border p-1 ml-3 rounded w-[100px] focus:outline-none"
+                className="border p-1 ml-3 rounded w-[100px] focus:outline-none text-black"
                 placeholder="1000"
                 value={lastXValues}
                 onChange={(e) => setLastXValues(e.target.value)}
@@ -257,8 +257,7 @@ const DeviceCompareScreen = ({ socket, onToggleExpand }) => {
             </div>
             <button
               onClick={submitGraphFilter}
-              className="w-fit h-fit text-gray-900 border border-gray-200 hover:bg-white hover:border-gray-300 rounded text-sm px-4 py-2"
-            >
+              className={`w-fit h-fit ${darkMode ? "bg-[#304463] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"} rounded text-sm px-4 py-2`}>
               Generate
             </button>
           </div>
