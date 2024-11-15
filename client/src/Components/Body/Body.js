@@ -108,7 +108,11 @@ const Body = () => {
               </h1>
               <button
                 onClick={onToggleExpandCompare}
-                className={`flex items-center gap-2 align-right h-fit ${darkMode ? "bg-[#50698f] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"} rounded text-sm px-4 py-2`}
+                className={`flex items-center gap-2 align-right h-fit ${
+                  darkMode
+                    ? "bg-[#50698f] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700"
+                    : "text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"
+                } rounded text-sm px-4 py-2`}
               >
                 <svg
                   width="24"
@@ -128,49 +132,52 @@ const Body = () => {
                 <span>Compare</span>
               </button>
             </div>
-            <table className="table-fixed w-full mb-4">
-              <thead className="">
-                <tr>
-                  <th className="text-left w-[20px] p-1">#</th>
-                  <th className="text-left w-[150px] p-1">ID</th>
-                  <th className="text-left w-[150px] p-2">Type</th>
-                  <th className="text-right p-1">Show</th>
-                </tr>
-              </thead>
-              <tbody>
-                {devices.map((device, index) => {
-                  const isSelected = device === selectedDevice;
-                  return (
-                    <tr
-                      key={device.id}
-                      className="cursor-pointer border-t border-dashed h-[50px] border-gray-200 rounded-lg"
-                      style={{
-                        backgroundColor: isSelected ? "rgba(0,0,0,0.03)" : "",
-                        borderLeft: isSelected ? "2px solid #304463" : "",
-                      }}
-                      onClick={() => handleDeviceClick(device)}
-                    >
-                      <td className="p-1 font-light">{index + 1}</td>
-                      <td className="p-1 font-light">
-                        {parseAttributeID(device.id)}
-                      </td>
-                      <td className="p-2">{parseAttributeKey(device.type)}</td>
-                      <td className="p-1 w-fit text-right">
-                        <input
-                          type="checkbox"
-                          className="form-checkbox h-4 w-4 accent-[#304463]"
-                          defaultChecked={true}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="overflow-auto h-[550px]">
+              <table className="table-fixed w-full">
+                <thead className="">
+                  <tr>
+                    <th className="text-left w-[20px] p-1">#</th>
+                    <th className="text-left w-[150px] p-1">ID</th>
+                    <th className="text-left w-[150px] p-2">Type</th>
+                    <th className="text-right p-1">Show</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {devices.map((device, index) => {
+                    const isSelected = device === selectedDevice;
+                    return (
+                      <tr
+                        key={device.id}
+                        className="cursor-pointer border-t border-dashed h-[50px] border-gray-200 rounded-lg"
+                        style={{
+                          backgroundColor: isSelected ? "rgba(0,0,0,0.03)" : "",
+                          borderLeft: isSelected ? "2px solid #304463" : "",
+                        }}
+                        onClick={() => handleDeviceClick(device)}
+                      >
+                        <td className="p-1 font-light">{index + 1}</td>
+                        <td className="p-1 font-light">
+                          {parseAttributeID(device.id)}
+                        </td>
+                        <td className="p-2">
+                          {parseAttributeKey(device.type)}
+                        </td>
+                        <td className="p-1 w-fit text-right">
+                          <input
+                            type="checkbox"
+                            className="form-checkbox h-4 w-4 accent-[#304463]"
+                            defaultChecked={true}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
             <hr className="w-[400px] h-1 mx-auto my-4 bg-gray-200 border-0 rounded md:my-5 dark:bg-gray-700"></hr>
-            <Config 
-            socket={socket}
-            />
+            <Config socket={socket} />
           </div>
         </div>
 
@@ -250,7 +257,11 @@ const Body = () => {
               {selectedDevice && (
                 <button
                   onClick={() => setSelectedDevice(null)}
-                  className={`rounded text-sm px-4 py-2 ${darkMode ? "bg-[#50698f] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700" :"text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"}`}
+                  className={`rounded text-sm px-4 py-2 ${
+                    darkMode
+                      ? "bg-[#50698f] text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700"
+                      : "text-gray-900 border border-gray-200 focus:outline-none hover:bg-white focus:ring-4 focus:ring-gray-100"
+                  }`}
                 >
                   Close
                 </button>

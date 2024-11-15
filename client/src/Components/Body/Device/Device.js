@@ -58,7 +58,6 @@ const Device = ({ socket, onExpandCompare, device }) => {
                   onToggleMenu={() => handleMenuToggle(key)}
                   onCloseMenu={() => setOpenMenuKey(null)}
                   onExpandCompare={onExpandCompare}
-                  darkMode={darkMode}
                   isValidValue={isValidValue}
                 />
               );

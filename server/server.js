@@ -67,6 +67,9 @@ app.use("/cors-anywhere", (req, res) => {
 let cachedData = null;
 let totalDataSent = 0; // Track total data sent for speed calculation
 let currentUseCaseValue = "Braude"; // Store current useCaseValue
+let refreshInterval = 100;
+let fetchDevicesInterval = null;
+let speedCalculationInterval = null;
 
 // import requests
 // url = 'http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:AirQualitySensor:GMW87:001?fromDate=2023-10-01T00:00:00.000Z&toDate=2025-12-31T23:59:59.999Z'
@@ -150,8 +153,9 @@ const calculateAndEmitSpeed = () => {
 };
 
 fetchDevices();
-setInterval(fetchDevices, 1000);
-setInterval(calculateAndEmitSpeed, 1000); // Calculate and emit speed every 5 seconds
+fetchDevicesInterval = setInterval(fetchDevices, refreshInterval);
+speedCalculationInterval = setInterval(calculateAndEmitSpeed, refreshInterval);
+
 
 io.on("connection", (socket) => {
   console.log("New client connected");
@@ -171,12 +175,21 @@ io.on("connection", (socket) => {
   // Listen for 'useCaseData' from the client to fetch data based on use case
   socket.on("useCaseData", (data) => {
     console.log("Received use case from client:", data.useCaseValue);
-
     // Update the current use case value dynamically
     currentUseCaseValue = data.useCaseValue;
-
     // Fetch devices based on the new use case
     fetchDevices();
+  });
+
+  // Listen for 'refreshTime' from the client to update the refresh interval
+  socket.on("refreshInterval", (data) => {
+    console.log("Received refresh interval from client:", data.refreshInterval);
+    // Clear the existing interval
+    clearInterval(fetchDevicesInterval);
+    clearInterval(speedCalculationInterval);
+    // Set the new interval based on the received refresh time
+    fetchDevicesInterval = setInterval(fetchDevices, data.refreshInterval);
+    speedCalculationInterval = setInterval(calculateAndEmitSpeed, data.refreshInterval);
   });
 
   // Listen for 'filterData' event from the client
