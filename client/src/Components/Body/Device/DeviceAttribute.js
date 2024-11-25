@@ -178,7 +178,14 @@ const DeviceAttribute = ({
                 </div>
               )}
             </div>
-            <div className="break-words flex-grow">{attributeValue}</div>
+            <div className="break-words flex-grow">
+              {/* Check if the attribute key is 'image' and display the image */}
+              {attributeKey.toLowerCase() === "image" ? (
+                <img src={attributeValue} alt="Device" className="w-full h-auto" />
+              ) : (
+                attributeValue
+              )}
+            </div>
             {attributeKey.includes("value") && (
               <span
                 className={`text-xs ${

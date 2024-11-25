@@ -40,7 +40,12 @@ const Device = ({ socket, onExpandCompare, device }) => {
             onCloseMenu={() => setOpenMenuKey(null)}
           />
           {Object.keys(device)
-            .sort()
+            .sort((a, b) => {
+              // Ensure 'image' is always last in the sorted order
+              if (a === "image") return 1;  // Put 'a' after 'b'
+              if (b === "image") return -1; // Put 'b' after 'a'
+              return a.localeCompare(b);     // Otherwise, compare normally
+            })
             .map((key) => {
               const value = JSON.parse(JSON.stringify(device[key])).value;
               const isValidValue = isInt(value) || isFloat(value);
