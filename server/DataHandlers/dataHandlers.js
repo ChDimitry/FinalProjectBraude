@@ -12,11 +12,11 @@ const fetchFilteredGraphData = async (
   ) => {
     try {
       // Construct the API URL dynamically based on the filter parameters
-      const API_URL = `http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:${deviceType}:${deviceID}?lastN=${lastX}&fromDate=${startDateTime.toISOString()}&toDate=${endDateTime.toISOString()}`;
+      const API_URL = process.env.API_URL || `http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:${deviceType}:${deviceID}?lastN=${lastX}&fromDate=${startDateTime.toISOString()}&toDate=${endDateTime.toISOString()}`;
       console.log("Fetching data from API:", API_URL);
   
       const response = await axios.get(
-        `http://localhost:5000/cors-anywhere/${API_URL}`,
+        `https://server-bice-seven-95.vercel.app/cors-anywhere/${API_URL}`,
         {
           headers: {
             Accept: "application/json",
@@ -40,10 +40,9 @@ const fetchFilteredGraphData = async (
 const fetchDevices = async (io, currentUseCaseValue) => {
     try {
       // API URL (using the CORS proxy)
-      const API_URL =
-        "http://172.16.101.172:1026/ngsi-ld/v1/entities/?local=true";
+      const API_URL = process.env.API_URL || "http://172.16.101.172:1026/ngsi-ld/v1/entities/?local=true";
       const response = await axios.get(
-        `http://localhost:5000/cors-anywhere/${API_URL}`,
+        `https://server-bice-seven-95.vercel.app/cors-anywhere/${API_URL}`,
         {
           headers: {
             Accept: "application/json",

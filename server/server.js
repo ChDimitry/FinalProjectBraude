@@ -15,7 +15,7 @@ const { fetchFilteredGraphData, fetchDevices, calculateAndEmitSpeed } = require(
 // Configure socket.io with CORS
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://client-pi-lemon.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
     allowedHeaders: [
@@ -31,7 +31,7 @@ const io = socketIo(server, {
 // Enable CORS for all origins on Express
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://client-pi-lemon.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
     allowedHeaders: [
@@ -54,6 +54,10 @@ const corsProxy = corsAnywhere.createServer({
 // CORS proxy route
 app.use("/cors-anywhere", (req, res) => {
   corsProxy.emit("request", req, res);
+});
+
+app.get("/", (req, res) => {
+  res.send("Server is running!");
 });
 
 let currentUseCaseValue = "Braude"; // Store current useCaseValue
@@ -191,3 +195,5 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
