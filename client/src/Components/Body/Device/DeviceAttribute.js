@@ -181,7 +181,7 @@ const DeviceAttribute = ({
             <div className="break-words flex-grow">
               {/* Check if the attribute key is 'image' and display the image */}
               {attributeKey.toLowerCase() === "image" ? (
-                <img src={attributeValue} alt="Device" className="w-full h-auto" />
+                <img src={attributeValue} alt="Device" className="w-full h-auto rounded mt-3" />
               ) : (
                 attributeValue
               )}

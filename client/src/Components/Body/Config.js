@@ -57,7 +57,7 @@ const Config = ({ socket }) => {
           <div>
             <label>Device Use Case</label>
             <select
-              value={useCaseValue}
+              type="text"
               onChange={getUseCase}
               className="border p-1 ml-3 mr-2 rounded w-[100px] focus:outline-none text-black"
             >

@@ -92,7 +92,7 @@ const Body = () => {
       </div>
 
       <div className="flex flex-col md:flex-row h-[900px] gap-4 p-4">
-        <div className="w-full md:w-[20%]">
+        <div className="w-full md:w-[25%]">
           <div
             className={`p-4 h-full ${
               darkMode ? "bg-[#304463] rounded" : "bg-gray-100 rounded"
