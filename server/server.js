@@ -11,7 +11,7 @@ const server = http.createServer(app);
 const { formatDate } = require('./Utils/formatDate');
 const { fetchFilteredGraphData, fetchDevices, calculateAndEmitSpeed } = require('./DataHandlers/dataHandlers');
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
+const CLIENT_URL = "https://client-dun-one.vercel.app";
 
 // Configure socket.io with CORS
 const io = socketIo(server, {
