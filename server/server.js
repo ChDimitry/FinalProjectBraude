@@ -11,41 +11,39 @@ const server = http.createServer(app);
 const { formatDate } = require('./Utils/formatDate');
 const { fetchFilteredGraphData, fetchDevices, calculateAndEmitSpeed } = require('./DataHandlers/dataHandlers');
 
-const CLIENT_URL = "https://client-dun-one.vercel.app";
-
 // Configure socket.io with CORS
 const io = socketIo(server, {
   cors: {
-    origin: CLIENT_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
+    origin: "https://client-dun-one.vercel.app", // Client URL
+    methods: ["GET", "POST"], // Allowed methods
+    credentials: true, // Allow credentials (cookies, etc.)
     allowedHeaders: [
       "Content-Type",
       "fiware-service",
       "fiware-servicepath",
       "Link",
       "Accept",
-      "Access-Control-Allow-Origin",
     ],
   },
+  transports: ["websocket", "polling"], // Specify transports explicitly here
 });
 
-// Enable CORS for all origins on Express
+// Enable CORS for Express
 app.use(
   cors({
-    origin: CLIENT_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
+    origin: "https://client-dun-one.vercel.app", // Client URL
+    methods: ["GET", "POST"], // Allowed methods
+    credentials: true, // Allow credentials (cookies, etc.)
     allowedHeaders: [
       "Content-Type",
       "fiware-service",
       "fiware-servicepath",
       "Link",
       "Accept",
-      "Access-Control-Allow-Origin",
     ],
   })
 );
+
 
 // Set up CORS Anywhere for proxied requests
 const corsProxy = corsAnywhere.createServer({
@@ -194,7 +192,7 @@ io.on("connection", (socket) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

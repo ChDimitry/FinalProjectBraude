@@ -2,6 +2,7 @@ const axios = require("axios");
 let cachedData = null;
 let totalDataSent = 0; // Track total data sent for speed calculation
 
+
 // Function to fetch filtered graph data from the API based on filter parameters
 const fetchFilteredGraphData = async (
     deviceID,
@@ -12,7 +13,7 @@ const fetchFilteredGraphData = async (
   ) => {
     try {
       // Construct the API URL dynamically based on the filter parameters
-      const API_URL = process.env.API_URL || `http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:${deviceType}:${deviceID}?lastN=${lastX}&fromDate=${startDateTime.toISOString()}&toDate=${endDateTime.toISOString()}`;
+      const API_URL = `http://172.16.101.172:8668/v2/entities/urn:ngsi-ld:${deviceType}:${deviceID}?lastN=${lastX}&fromDate=${startDateTime.toISOString()}&toDate=${endDateTime.toISOString()}`;
       console.log("Fetching data from API:", API_URL);
   
       const response = await axios.get(
@@ -23,6 +24,7 @@ const fetchFilteredGraphData = async (
             Link: '<http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"',
             "fiware-service": "openiot",
             "fiware-servicepath": "/",
+            "X-Requested-With": "XMLHttpRequest", // Add this header
           },
         }
       );
@@ -37,10 +39,12 @@ const fetchFilteredGraphData = async (
 
 
   // Function to fetch data from the API
-const fetchDevices = async (io, currentUseCaseValue) => {
+  const fetchDevices = async (io, currentUseCaseValue) => {
     try {
-      // API URL (using the CORS proxy)
-      const API_URL = process.env.API_URL || "http://172.16.101.172:1026/ngsi-ld/v1/entities/?local=true";
+      // Define the API URL
+      const API_URL = "http://172.16.101.172:1026/ngsi-ld/v1/entities/?local=true";
+  
+      // Call the API through the proxy
       const response = await axios.get(
         `https://server-kohl-delta.vercel.app/cors-anywhere/${API_URL}`,
         {
@@ -49,26 +53,29 @@ const fetchDevices = async (io, currentUseCaseValue) => {
             Link: '<http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"',
             "fiware-service": "openiot",
             "fiware-servicepath": "/",
+            "X-Requested-With": "XMLHttpRequest", // Add this header
           },
         }
       );
+  
       // Filter devices based on the useCases attribute
       let filteredData = response.data;
       if (currentUseCaseValue !== "All") {
-        // Filter devices based on the useCases attribute if it's not "All"
-        filteredData = response.data.filter(device =>
-          device.useCases && device.useCases.value === currentUseCaseValue
+        filteredData = response.data.filter(
+          (device) => device.useCases && device.useCases.value === currentUseCaseValue
         );
       }
-      cachedData = filteredData;
-      const dataSize = JSON.stringify(cachedData).length; // Calculate the size of the data
-      totalDataSent += dataSize; // Increment total data sent
   
-      io.emit("devices", cachedData); // Broadcast the data to all connected clients
+      // Cache and emit the data
+      cachedData = filteredData;
+      const dataSize = JSON.stringify(cachedData).length;
+      totalDataSent += dataSize;
+      io.emit("devices", cachedData);
     } catch (error) {
       console.error("Error fetching data from external API:", error.message);
     }
-};
+  };
+  
 
 // Function to calculate and emit transfer speed
 const calculateAndEmitSpeed = (io) => {
