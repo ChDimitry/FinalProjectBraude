@@ -16,7 +16,7 @@ const fetchFilteredGraphData = async (
       console.log("Fetching data from API:", API_URL);
   
       const response = await axios.get(
-        `https://server-bice-seven-95.vercel.app/cors-anywhere/${API_URL}`,
+        `https://server-kohl-delta.vercel.app/cors-anywhere/${API_URL}`,
         {
           headers: {
             Accept: "application/json",
@@ -42,7 +42,7 @@ const fetchDevices = async (io, currentUseCaseValue) => {
       // API URL (using the CORS proxy)
       const API_URL = process.env.API_URL || "http://172.16.101.172:1026/ngsi-ld/v1/entities/?local=true";
       const response = await axios.get(
-        `https://server-bice-seven-95.vercel.app/cors-anywhere/${API_URL}`,
+        `https://server-kohl-delta.vercel.app/cors-anywhere/${API_URL}`,
         {
           headers: {
             Accept: "application/json",

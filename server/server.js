@@ -11,11 +11,12 @@ const server = http.createServer(app);
 const { formatDate } = require('./Utils/formatDate');
 const { fetchFilteredGraphData, fetchDevices, calculateAndEmitSpeed } = require('./DataHandlers/dataHandlers');
 
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 // Configure socket.io with CORS
 const io = socketIo(server, {
   cors: {
-    origin: "https://client-pi-lemon.vercel.app",
+    origin: CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true,
     allowedHeaders: [
@@ -24,6 +25,7 @@ const io = socketIo(server, {
       "fiware-servicepath",
       "Link",
       "Accept",
+      "Access-Control-Allow-Origin",
     ],
   },
 });
@@ -31,7 +33,7 @@ const io = socketIo(server, {
 // Enable CORS for all origins on Express
 app.use(
   cors({
-    origin: "https://client-pi-lemon.vercel.app",
+    origin: CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true,
     allowedHeaders: [
@@ -40,6 +42,7 @@ app.use(
       "fiware-servicepath",
       "Link",
       "Accept",
+      "Access-Control-Allow-Origin",
     ],
   })
 );

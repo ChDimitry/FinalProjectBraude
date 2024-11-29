@@ -12,7 +12,7 @@ import DeviceCompareScreen from "./DeviceCompare.js";
 import Config from "./Config.js";
 
 // Initialize the WebSocket connection (replace with your server URL)
-const socket = io("https://server-bice-seven-95.vercel.app");
+const socket = io("https://server-kohl-delta.vercel.app");
 
 const Body = () => {
   const [devices, setDevices] = useState([]);
